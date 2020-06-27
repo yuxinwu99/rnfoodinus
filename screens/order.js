@@ -5,6 +5,7 @@ import {
   FlatList,
   StyleSheet,
   TouchableOpacity,
+  TextInput,
   Button,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
@@ -13,6 +14,9 @@ export default class Order extends React.Component {
   state = {
     menu: null,
     custOrder: [],
+    menuId: 0,
+    name: '',
+    price: 0,
   };
   // navigation = this.props;
   // key = this.props.navigation.getParam('key', 'NO-ID');
@@ -20,10 +24,43 @@ export default class Order extends React.Component {
   //   super();
   //   console.ignoredYellowBox = ['Setting a timer'];
   // }
-  fetchData = key => {
+
+  handlename = name => {
+    this.setState({name: name});
+  };
+  handleprice = price => {
+    this.setState({price: price});
+  };
+  AddMenu = () => {
+    console.log(this.state.menuId + this.state.name + this.state.price);
+    console.log('add menu called');
+    if (this.state.name != '' && this.state.price != 0) {
+      firestore()
+        .collection('stores')
+        .where('id', '==', this.props.route.params.key)
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(document => {
+            document.ref.collection('menu').add({
+              id: this.state.size,
+              name: this.state.name,
+              price: this.state.price,
+              count: 0,
+            });
+          });
+
+          this.fetchData();
+          this.setState({name: ''});
+          this.setState({price: 0});
+        })
+        .catch(err => console.error(err));
+    } else console.log('input something kekw');
+  };
+
+  fetchData = () => {
     firestore()
       .collection('stores')
-      .where('id', '==', key)
+      .where('id', '==', this.props.route.params.key)
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(document => {
@@ -32,6 +69,7 @@ export default class Order extends React.Component {
             .get()
             .then(querySnapshot => {
               const results = [];
+              this.state.size = querySnapshot.size + 1;
               querySnapshot.docs.map(documentSnapshot =>
                 results.push(documentSnapshot.data()),
               );
@@ -83,7 +121,7 @@ export default class Order extends React.Component {
             cust_comp: false,
             seller_comp: false,
           })
-          .then(console.log('order sent'));
+          .then(console.log('order sent' + orderDetails));
       }
     }
   };
@@ -98,7 +136,7 @@ export default class Order extends React.Component {
   }
   componentDidMount() {
     console.log('order mounted');
-    this.fetchData(this.props.route.params.key);
+    this.fetchData();
   }
   render() {
     const {navigation} = this.props;
@@ -107,14 +145,30 @@ export default class Order extends React.Component {
       <View>
         {console.log('key=' + key)}
         {console.log('')}
-
+        <TextInput
+          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          placeholder="Item name"
+          value={this.state.name}
+          onChangeText={name => this.handlename(name)}
+        />
+        <TextInput
+          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          placeholder="Item Price"
+          value={this.state.price}
+          onChangeText={price => this.handleprice(price)}
+        />
+        <Button
+          title="Add Menu"
+          onPress={() => {
+            this.AddMenu();
+          }}
+        />
         <FlatList
           data={this.state.menu}
           renderItem={({item}) => (
-            <TouchableOpacity style={styles.itemContainer}>
-              <Text>{item.name}</Text>
-              <Text>{item.price}</Text>
-              <Text>{item.count}</Text>
+            <View style={styles.itemContainer} elevation={5}>
+              <Text>{item.name + '                $' + item.price}</Text>
+              <Text>{'number of items ordered=' + item.count}</Text>
               <Button
                 title="+"
                 onPress={() => {
@@ -127,7 +181,7 @@ export default class Order extends React.Component {
                   this.handleSubtract(item.name);
                 }}
               />
-            </TouchableOpacity>
+            </View>
           )}
           style={styles.container}
           keyExtractor={item => item.id}
@@ -146,6 +200,8 @@ export default class Order extends React.Component {
 const styles = StyleSheet.create({
   itemContainer: {
     flex: 1,
+    marginBottom: 10,
+    backgroundColor: 'white',
   },
   container: {
     padding: 10,
