@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import firebaseDb from '../firebaseDb';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 export default class Login extends Component {
   constructor() {
@@ -21,6 +22,8 @@ export default class Login extends Component {
       email: '',
       password: '',
       isLoading: false,
+      loggedIn: false,
+      info: '',
     };
   }
 
@@ -40,14 +43,24 @@ export default class Login extends Component {
       auth()
         .signInWithEmailAndPassword(this.state.email, this.state.password)
         .then(res => {
-          console.log(res);
+          //console.log(res);
           console.log('User logged-in successfully!');
+          firestore()
+            .collection('users')
+            .doc(this.state.email)
+            .get()
+            .then(doc => {
+              const result = doc.data().seller;
+              this.state.info = result;
+              console.log(this.state.info);
+            });
           this.setState({
             isLoading: false,
             email: '',
             password: '',
           });
-          this.props.navigation.navigate('Home');
+          //console.log(this.state.info);
+          this.props.navigation.navigate('Stores');
         })
         .catch(error => this.setState({errorMessage: error.message}));
     }

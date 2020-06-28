@@ -10,6 +10,7 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
 
 export default class Signup extends React.Component {
   constructor() {
@@ -36,12 +37,21 @@ export default class Signup extends React.Component {
       this.setState({
         isLoading: true,
       });
+
       auth()
         .createUserWithEmailAndPassword(this.state.email, this.state.password)
         .then(res => {
           res.user.updateProfile({
             displayName: this.state.displayName,
           });
+          firestore()
+            .collection('users')
+            .doc(this.state.email)
+            .set({
+              email: this.state.email,
+              name: this.state.displayName,
+              seller: false,
+            });
           console.log('User registered successfully!');
           this.setState({
             isLoading: false,
