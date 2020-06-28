@@ -142,7 +142,7 @@ export default class Order extends React.Component {
     const {navigation} = this.props;
     const {key} = this.props.route.params;
     return (
-      <View>
+      <View style={styles.container}>
         {console.log('key=' + key)}
         {console.log('')}
         <TextInput
@@ -158,6 +158,7 @@ export default class Order extends React.Component {
           onChangeText={price => this.handleprice(price)}
         />
         <Button
+          style={styles.button}
           title="Add Menu"
           onPress={() => {
             this.AddMenu();
@@ -167,20 +168,29 @@ export default class Order extends React.Component {
           data={this.state.menu}
           renderItem={({item}) => (
             <View style={styles.itemContainer} elevation={5}>
-              <Text>{item.name + '                $' + item.price}</Text>
-              <Text>{'number of items ordered=' + item.count}</Text>
-              <Button
-                title="+"
+              <View>
+                <Text style={styles.text}>
+                  {item.name + '                $' + item.price}
+                </Text>
+                <Text style={styles.text}>
+                  {'number of items ordered=' + item.count}
+                </Text>
+              </View>
+
+              <TouchableOpacity
+                style={styles.button}
                 onPress={() => {
                   this.handleAdd(item.name);
-                }}
-              />
-              <Button
-                title="-"
+                }}>
+                <Text>+</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.button}
                 onPress={() => {
                   this.handleSubtract(item.name);
-                }}
-              />
+                }}>
+                <Text>-</Text>
+              </TouchableOpacity>
             </View>
           )}
           style={styles.container}
@@ -198,12 +208,28 @@ export default class Order extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  button: {
+    flex: 1,
+    height: '10%',
+    width: '10%',
+    alignSelf: 'flex-end',
+    marginRight: 30,
+    marginBottom: 10,
+    borderColor: '#cccccc',
+    borderWidth: 0.5,
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  text: {
+    marginLeft: 10,
+    marginTop: 10,
+  },
   itemContainer: {
     flex: 1,
     marginBottom: 10,
     backgroundColor: 'white',
   },
   container: {
-    padding: 10,
+    flex: 1,
   },
 });

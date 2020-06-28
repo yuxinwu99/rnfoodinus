@@ -114,7 +114,7 @@ export default class Stores extends React.Component {
                   name: item.name,
                 });
               }}>
-              <Text>{item.name}</Text>
+              <Text style={{margin: 10}}>{item.name}</Text>
             </TouchableOpacity>
           )}
           style={styles.container}
@@ -129,6 +129,10 @@ const styles = StyleSheet.create({
   itemContainer: {
     flex: 1,
     marginBottom: 10,
+    backgroundColor: 'white',
+    borderColor: '#cccccc',
+    borderWidth: 0.5,
+    borderRadius: 15,
   },
   container: {
     padding: 10,
