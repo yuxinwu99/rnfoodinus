@@ -17,9 +17,8 @@ export default function DrawerNavigator() {
   return (
     <NavigationContainer>
       <Drawer.Navigator
-        initialRouteName="Home"
+        initialRouteName="Login"
         drawerType={dimensions.width >= 768 ? 'permanent' : 'front'}>
-        <Drawer.Screen name="Home" component={homeStack} />
         <Drawer.Screen name="Login" component={loginStack} />
         <Drawer.Screen name="Purchase History" component={histStack} />
         <Drawer.Screen name="Stores" component={StoresStack} />
