@@ -28,6 +28,8 @@ export default class Stores extends React.Component {
     stores: null,
     name: '',
     size: 0,
+    search: '',
+    filtered: [],
   };
 
   componentWillUnmount() {
@@ -63,7 +65,21 @@ export default class Stores extends React.Component {
   handlename = name => {
     this.setState({name: name});
   };
-
+  handlesearch = item => {
+    this.setState({
+      search: item,
+    });
+    if (this.state.search != '') {
+      var lowerCasedItem = item.toLowerCase();
+      var newArray = this.state.stores.filter(
+        stores => stores.name.toLowerCase().includes(lowerCasedItem) == true,
+      );
+      console.log(newArray);
+      this.setState({
+        filtered: newArray,
+      });
+    }
+  };
   componentDidMount() {
     this._isMounted = true;
     this._isMounted && this.fetchdata();
@@ -83,7 +99,7 @@ export default class Stores extends React.Component {
         querySnapshot.docs.map(documentSnapshot =>
           results.push(documentSnapshot.data()),
         );
-        this.setState({isLoading: false, stores: results});
+        this.setState({isLoading: false, stores: results, filtered: results});
       })
       .catch(err => console.error(err));
   };
@@ -97,13 +113,19 @@ export default class Stores extends React.Component {
       <View>
         <TextInput
           style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          placeholder="Search..."
+          value={this.state.search}
+          onChangeText={item => this.handlesearch(item)}
+        />
+        <TextInput
+          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
           placeholder="Title"
           value={this.state.name}
           onChangeText={name => this.handlename(name)}
         />
         <Button onPress={this.AddStore} title="Add" />
         <FlatList
-          data={this.state.stores}
+          data={this.state.filtered}
           renderItem={({item}) => (
             <TouchableOpacity
               style={styles.itemContainer}
