@@ -171,7 +171,7 @@ export default class Order extends React.Component {
           data={this.state.menu}
           renderItem={({item}) => (
             <View style={styles.itemContainer} elevation={5}>
-              <Text style={styles.text}>
+              <Text style={styles.name}>
                 {item.name + '                $' + item.price}
               </Text>
 
@@ -180,7 +180,14 @@ export default class Order extends React.Component {
                 onPress={() => {
                   this.handleAdd(item.name);
                 }}>
-                <Text style={{textAlign: 'center', fontSize: 15}}>+</Text>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                  }}>
+                  +
+                </Text>
               </TouchableOpacity>
               <Text style={styles.text}>
                 {'no. of items ordered=' + item.count}
@@ -190,7 +197,14 @@ export default class Order extends React.Component {
                 onPress={() => {
                   this.handleSubtract(item.name);
                 }}>
-                <Text style={{textAlign: 'center', fontSize: 15}}>-</Text>
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    fontSize: 20,
+                    fontWeight: 'bold',
+                  }}>
+                  -
+                </Text>
               </TouchableOpacity>
             </View>
           )}
@@ -214,24 +228,31 @@ export default class Order extends React.Component {
 
 const styles = StyleSheet.create({
   button: {
-    height: 20,
+    height: 30,
     width: '10%',
     alignSelf: 'flex-end',
     marginLeft: 100,
     margin: 10,
-    borderColor: '#aaaaaa',
-    borderWidth: 0.9,
-    borderRadius: 5,
+    // borderColor: '#aaaaaa',
+    // borderWidth: 0.9,
+    // borderRadius: 5,
     alignItems: 'center',
   },
   bigButton: {
     backgroundColor: 'deepskyblue',
   },
+  name: {
+    width: '50%',
+    height: 30,
+    margin: 10,
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
   text: {
     width: '50%',
-    height: 20,
+    height: 30,
     margin: 10,
-    fontSize: 15,
+    fontSize: 20,
   },
   itemContainer: {
     flex: 1,

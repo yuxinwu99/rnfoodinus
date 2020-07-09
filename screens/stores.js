@@ -140,7 +140,7 @@ export default class Stores extends React.Component {
             </TouchableOpacity>
           )}
           style={styles.container}
-          keyExtractor={item => item.id}
+          keyExtractor={item => item.id.toString()}
         />
       </View>
     );
