@@ -17,6 +17,7 @@ export default class Order extends React.Component {
     menuId: 0,
     name: '',
     price: 0,
+    sum: 0,
   };
   // navigation = this.props;
   // key = this.props.navigation.getParam('key', 'NO-ID');
@@ -44,7 +45,7 @@ export default class Order extends React.Component {
             document.ref.collection('menu').add({
               id: this.state.size,
               name: this.state.name,
-              price: this.state.price,
+              price: parseFloat(this.state.price),
               count: 0,
             });
           });
@@ -85,6 +86,7 @@ export default class Order extends React.Component {
     for (var i = 0; i < this.state.menu.length; i++) {
       if (this.state.menu[i].name == itemName) {
         this.state.menu[i].count += 1;
+        this.state.sum += this.state.menu[i].price;
         console.log(this.state.menu[i].count);
         this.forceUpdate();
       }
@@ -97,6 +99,7 @@ export default class Order extends React.Component {
       if (this.state.menu[i].name == itemName) {
         if (this.state.menu[i].count != 0) {
           this.state.menu[i].count -= 1;
+          this.state.sum -= this.state.menu[i].price;
           console.log(this.state.menu[i].count);
           this.forceUpdate();
         }
@@ -196,12 +199,16 @@ export default class Order extends React.Component {
           style={styles.container}
           keyExtractor={item => item.id}
         />
-        <Button
-          title="Send Order"
+        <TouchableOpacity
+          style={styles.bigButton}
           onPress={() => {
             this.sendOrder();
-          }}
-        />
+          }}>
+          <Text style={{textAlign: 'center'}}>Send Order</Text>
+          <Text style={{textAlign: 'center'}}>
+            Total=${this.state.sum.toFixed(2)}
+          </Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -219,6 +226,9 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: 5,
     alignItems: 'center',
+  },
+  bigButton: {
+    backgroundColor: 'deepskyblue',
   },
   text: {
     marginLeft: 10,
