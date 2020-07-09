@@ -171,28 +171,26 @@ export default class Order extends React.Component {
           data={this.state.menu}
           renderItem={({item}) => (
             <View style={styles.itemContainer} elevation={5}>
-              <View>
-                <Text style={styles.text}>
-                  {item.name + '                $' + item.price}
-                </Text>
-                <Text style={styles.text}>
-                  {'number of items ordered=' + item.count}
-                </Text>
-              </View>
+              <Text style={styles.text}>
+                {item.name + '                $' + item.price}
+              </Text>
 
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => {
                   this.handleAdd(item.name);
                 }}>
-                <Text>+</Text>
+                <Text style={{textAlign: 'center', fontSize: 15}}>+</Text>
               </TouchableOpacity>
+              <Text style={styles.text}>
+                {'no. of items ordered=' + item.count}
+              </Text>
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => {
                   this.handleSubtract(item.name);
                 }}>
-                <Text>-</Text>
+                <Text style={{textAlign: 'center', fontSize: 15}}>-</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -216,14 +214,13 @@ export default class Order extends React.Component {
 
 const styles = StyleSheet.create({
   button: {
-    flex: 1,
-    height: '10%',
+    height: 20,
     width: '10%',
     alignSelf: 'flex-end',
-    marginRight: 30,
-    marginBottom: 10,
-    borderColor: '#cccccc',
-    borderWidth: 0.5,
+    marginLeft: 100,
+    margin: 10,
+    borderColor: '#aaaaaa',
+    borderWidth: 0.9,
     borderRadius: 5,
     alignItems: 'center',
   },
@@ -231,13 +228,18 @@ const styles = StyleSheet.create({
     backgroundColor: 'deepskyblue',
   },
   text: {
-    marginLeft: 10,
-    marginTop: 10,
+    width: '50%',
+    height: 20,
+    margin: 10,
+    fontSize: 15,
   },
   itemContainer: {
     flex: 1,
     marginBottom: 10,
     backgroundColor: 'white',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    alignContent: 'space-around',
   },
   container: {
     flex: 1,
