@@ -32,6 +32,7 @@ export default class Order extends React.Component {
   handleprice = price => {
     this.setState({price: price});
   };
+
   AddMenu = () => {
     console.log(this.state.menuId + this.state.name + this.state.price);
     console.log('add menu called');
@@ -106,25 +107,36 @@ export default class Order extends React.Component {
       }
     }
   };
-  sendOrder = () => {
+  confirmOrder = () => {
+    var temp = ['dummy1', 'dummy2'];
     for (var i = 0; i < this.state.menu.length; i++) {
       if (this.state.menu[i].count != 0) {
         let orderDetails =
           this.state.menu[i].name + '   x' + this.state.menu[i].count;
         console.log(orderDetails);
+        temp.push(orderDetails.toString());
+        console.log(temp);
         // this.setState({
         //   custOrder: [...this.state.custOrder, orderDetails],
         // });
-        firestore()
-          .collection('order')
-          .doc(this.props.route.params.name)
-          .collection('comorder')
-          .add({
-            order: orderDetails,
-            cust_comp: false,
-            seller_comp: false,
-          })
-          .then(console.log('order sent' + orderDetails));
+        // firestore()
+        //   .collection('order')
+        //   .doc(this.props.route.params.name)
+        //   .collection('comorder')
+        //   .add({
+        //     order: orderDetails,
+        //     cust_comp: false,
+        //     seller_comp: false,
+        //   })
+        // .then(console.log('order sent' + orderDetails));
+      }
+      if (i + 1 == this.state.menu.length) {
+        console.log('to payment');
+        this.props.navigation.navigate('Payment', {
+          order: temp,
+          name: this.props.route.params.name,
+          total: this.state.sum.toFixed(2),
+        });
       }
     }
   };
@@ -214,9 +226,9 @@ export default class Order extends React.Component {
         <TouchableOpacity
           style={styles.bigButton}
           onPress={() => {
-            this.sendOrder();
+            this.confirmOrder();
           }}>
-          <Text style={{textAlign: 'center'}}>Send Order</Text>
+          <Text style={{textAlign: 'center'}}>Payment</Text>
           <Text style={{textAlign: 'center'}}>
             Total=${this.state.sum.toFixed(2)}
           </Text>
