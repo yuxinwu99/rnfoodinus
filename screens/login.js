@@ -60,6 +60,8 @@ export default class Login extends Component {
             password: '',
           });
           //console.log(this.state.info);
+          // var idTokenResult = auth().currentUser.getIdTokenResult();
+          // console.log('User JWT: ', idTokenResult.token);
           this.props.navigation.navigate('Stores');
         })
         .catch(error => this.setState({errorMessage: error.message}));

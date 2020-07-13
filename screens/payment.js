@@ -9,17 +9,34 @@ import {
   Button,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
+import auth from '@react-native-firebase/auth';
+import firebase from '@react-native-firebase/app';
 
 export default class Payment extends React.Component {
   sendOrder = () => {
     var order = this.props.route.params.order;
+    var user = auth().currentUser;
+    var currentTime = firebase.firestore.Timestamp.now();
     for (var i = 0; i < order.length; i++) {
       if (order[i] != 'dummy1' && order[i] != 'dummy2') {
+        firestore()
+          .collection('users')
+          .doc(user.email)
+          .collection('Orders')
+          .add({
+            time: currentTime,
+            order: order[i],
+            cust_comp: false,
+            seller_comp: false,
+          });
+
         firestore()
           .collection('order')
           .doc(this.props.route.params.name)
           .collection('comorder')
           .add({
+            time: currentTime,
+            userEmail: user.email,
             order: order[i],
             cust_comp: false,
             seller_comp: false,
