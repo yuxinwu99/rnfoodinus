@@ -10,7 +10,6 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import firebaseDb from '../firebaseDb';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 
@@ -62,7 +61,7 @@ export default class Login extends Component {
           //console.log(this.state.info);
           // var idTokenResult = auth().currentUser.getIdTokenResult();
           // console.log('User JWT: ', idTokenResult.token);
-          this.props.navigation.navigate('Stores');
+          this.props.navigation.navigate('Profile');
         })
         .catch(error => this.setState({errorMessage: error.message}));
     }
