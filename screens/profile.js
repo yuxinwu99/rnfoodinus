@@ -19,7 +19,7 @@ export default class ProfilePage extends React.Component {
     return (
       <View>
         <Text> Welcome! </Text>
-        <Text> {this.user.displayName} </Text>
+        {<Text> {this.user.displayName} </Text>}
         <TouchableOpacity
           onPress={() => {
             auth()
