@@ -2,12 +2,6 @@ import React, {Component} from 'react';
 import FoodForm from '../comp/FoodForm';
 
 export default class addFoodScreen extends Component {
-  // static navigationOptions = ({navigation}) => {
-  //   return {
-  //     title: navigation.getParam('food') ? 'Edit Food' : 'New Food',
-  //   };
-  // };
-
   state = {
     food: {
       name: '',
@@ -29,28 +23,11 @@ export default class addFoodScreen extends Component {
     this.props.navigation.popToTop();
   };
 
-  // setCurrentSubIngredient = text => {
-  //   this.setState(prevState => ({
-  //     currentSubIngredient: (prevState.currentSubIngredient = text),
-  //   }));
-  // };
-
-  // submitSubIngredients = () => {
-  //   let ingredient = this.state.currentSubIngredient;
-
-  //   if (ingredient && ingredient.length > 2) {
-  //     this.setState(prevState => ({
-  //       food: {
-  //         ...prevState.food,
-  //         subIngredients: [...prevState.food.subIngredients, ingredient],
-  //       },
-  //     }));
-  //   }
-  // };
-
   render() {
+    const currentUser = this.props.route.params.user;
     return (
       <FoodForm
+        username={this.props.route.params.username}
         food={this.state.food}
         onFoodAdded={this.props.route.params.foodAddedCallback}
         onFoodUpdated={this.onFoodUpdated}

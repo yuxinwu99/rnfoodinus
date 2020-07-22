@@ -4,17 +4,9 @@ import {Divider, Icon} from 'react-native-elements';
 import {deleteFood} from '../comp/foodbackend';
 
 export default class itemDetailScreen extends Component {
-  // static navigationOptions = () => {
-  //   return {
-  //     title: 'Food Details',
-  //   };
-  // };
-  //const currentFood = this.props.route.params.food;
   render() {
-    //const food = this.props.navigation.getParam('food');
     const food = this.props.route.params.food;
-
-    //const onFoodDeleted = this.props.navigation.getParam('foodDeletedCallback');
+    const user = this.props.route.params.user;
     const onFoodDeleted = this.props.route.params.foodDeletedCallback;
 
     console.log(food);
@@ -28,6 +20,7 @@ export default class itemDetailScreen extends Component {
             onPress={() =>
               this.props.navigation.navigate('Add Item', {
                 food: food,
+                user: user,
               })
             }
           />
@@ -45,7 +38,7 @@ export default class itemDetailScreen extends Component {
                   {
                     text: 'OK',
                     onPress: () => {
-                      deleteFood(food, onFoodDeleted);
+                      deleteFood(food, user, onFoodDeleted);
                     },
                   },
                 ],
@@ -60,25 +53,6 @@ export default class itemDetailScreen extends Component {
           Short Description: {food.description}
         </Text>
         <Text style={styles.categoryText}>Price: {food.price}</Text>
-
-        {/* <Text style={styles.ingredientText}>Ingredients</Text>
-        {food.subIngredients === undefined ||
-        food.subIngredients.length == 0 ? (
-          <Text>None</Text>
-        ) : (
-          <FlatList
-            data={food.subIngredients}
-            contentContainerStyle={styles.listContainer}
-            ItemSeparatorComponent={() => (
-              <Divider style={{backgroundColor: 'black'}} />
-            )}
-            scrollEnabled={false}
-            keyExtractor={(item, index) => index.toString()}
-            renderItem={({item}) => (
-              <Text style={styles.ingredientItemText}>{item}</Text>
-            )}
-          />
-        )} */}
       </View>
     );
   }

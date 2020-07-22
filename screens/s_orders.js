@@ -17,12 +17,14 @@ export default class sOrders extends Component {
   };
 
   componentDidMount() {
-    var user = auth().currentUser;
-    getOrders(user.storename, this.onOrdersReceived);
+    var newUser = auth().currentUser.displayName;
+    getOrders(newUser, this.onOrdersReceived);
+    this.setState({
+      user: newUser,
+    });
   }
 
   render() {
-    var user = auth().currentUser;
     return this.state.orderItems.length > 0 ? (
       <SafeAreaView style={styles.container}>
         <FlatList
@@ -42,7 +44,7 @@ export default class sOrders extends Component {
                 subtitleStyle={styles.subtitleStyle}
                 subtitle={'Customer: ' + item.useremail}
                 onPress={() => {
-                  toggleSellerComp(user.storename, index);
+                  toggleSellerComp(user, index);
                   this.setState(prevState => ({
                     indexer: (prevState.indexer = index),
                   }));

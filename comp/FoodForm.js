@@ -116,9 +116,9 @@ export default withFormik({
       values.id = props.food.id;
       values.createdAt = props.food.createdAt;
       values.image = props.food.image;
-      uploadFood(values, props.onFoodUpdated, {updating: true});
+      uploadFood(values, props.onFoodUpdated, props.username, {updating: true});
     } else {
-      uploadFood(values, props.onFoodAdded, {updating: false});
+      uploadFood(values, props.onFoodAdded, props.username, {updating: false});
     }
   },
 })(FoodForm);

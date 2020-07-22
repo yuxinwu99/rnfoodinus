@@ -10,6 +10,7 @@ import {
 import {getFoods} from '../comp/foodbackend';
 import ActionButton from 'react-native-action-button';
 import {ListItem, Divider} from 'react-native-elements';
+import auth from '@react-native-firebase/auth';
 
 export default class sMenu extends Component {
   state = {
@@ -41,7 +42,12 @@ export default class sMenu extends Component {
   };
 
   componentDidMount() {
-    getFoods(this.onFoodsReceived);
+    var newUser = auth().currentUser.displayName;
+    getFoods(newUser, this.onFoodsReceived);
+    this.setState({
+      user: newUser,
+    });
+    console.log(user);
   }
 
   showActionButton = () => (
@@ -50,6 +56,7 @@ export default class sMenu extends Component {
       onPress={() =>
         this.props.navigation.navigate('Add Item', {
           foodAddedCallback: this.onFoodAdded,
+          username: this.state.user,
         })
       }
     />
@@ -85,6 +92,7 @@ export default class sMenu extends Component {
                   }));
                   this.props.navigation.navigate('Item Details', {
                     food: item,
+                    username: this.state.user,
                     itemDeletedCallback: this.onItemDeleted,
                   });
                 }}

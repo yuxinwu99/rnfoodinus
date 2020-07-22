@@ -8,7 +8,6 @@ import {
   Alert,
   ActivityIndicator,
 } from 'react-native';
-import firebaseDb from '../firebaseDb';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
 

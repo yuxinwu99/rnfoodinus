@@ -42,7 +42,6 @@ export default class sSignup extends Component {
         .then(res => {
           res.user.updateProfile({
             displayName: this.state.displayName,
-            location: this.state.location,
           });
           firestore()
             .collection('users')
@@ -50,7 +49,15 @@ export default class sSignup extends Component {
             .set({
               email: this.state.email,
               name: this.state.displayName,
+              location: this.state.location,
               seller: true,
+            });
+          firestore()
+            .collection('stores')
+            .doc(this.state.name)
+            .set({
+              name: this.state.name,
+              //id: this.state.size + 1,
             });
           console.log('User registered successfully!');
           this.setState({
@@ -60,7 +67,7 @@ export default class sSignup extends Component {
             email: '',
             password: '',
           });
-          this.props.navigation.navigate('s_login');
+          this.props.navigation.navigate('Login');
         })
         .catch(error => this.setState({errorMessage: error.message}));
     }

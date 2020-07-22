@@ -38,34 +38,26 @@ import {v4 as uuidv4} from 'uuid';
 //     });
 // }
 
-export function updateFood(food, updateComplete) {
-  food.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
-  console.log('Updating food in firebase');
-
-  firestore()
-    .collection('Foods')
-    .doc(food.id)
-    .set(food)
-    .then(() => updateComplete(food))
-    .catch(error => console.log(error));
-}
-
-export function deleteFood(food, deleteComplete) {
+export function deleteFood(food, storename, deleteComplete) {
   console.log(food);
 
   firestore()
-    .collection('Foods')
+    .collection('stores')
+    .doc(storename)
+    .collection('menu')
     .doc(food.id)
     .delete()
     .then(() => deleteComplete())
     .catch(error => console.log(error));
 }
 
-export async function getFoods(foodsRetreived) {
+export async function getFoods(storename, foodsRetreived) {
   var foodList = [];
 
   var snapshot = await firestore()
-    .collection('Foods')
+    .collection('stores')
+    .doc(storename)
+    .collection('menu')
     .orderBy('createdAt')
     .get();
 
@@ -119,7 +111,7 @@ export async function toggleCustomerComp(storename, orderID) {
     });
 }
 
-export function uploadFood(food, onFoodUploaded, {updating}) {
+export function uploadFood(food, onFoodUploaded, username, {updating}) {
   if (food.imageUri) {
     const fileExtension = food.imageUri.split('.').pop();
     console.log('EXT: ' + fileExtension);
@@ -158,10 +150,10 @@ export function uploadFood(food, onFoodUploaded, {updating}) {
 
           if (updating) {
             console.log('Updating....');
-            updateFood(food, onFoodUploaded);
+            updateFood(food, username, onFoodUploaded);
           } else {
             console.log('adding...');
-            addFood(food, onFoodUploaded);
+            addFood(food, username, onFoodUploaded);
           }
         });
       },
@@ -173,24 +165,40 @@ export function uploadFood(food, onFoodUploaded, {updating}) {
 
     if (updating) {
       console.log('Updating....');
-      updateFood(food, onFoodUploaded);
+      updateFood(food, username, onFoodUploaded);
     } else {
       console.log('adding...');
-      addFood(food, onFoodUploaded);
+      addFood(food, username, onFoodUploaded);
     }
   }
 }
 
-export function addFood(food, addComplete) {
+export function addFood(food, storename, addComplete) {
   food.createdAt = firebase.firestore.FieldValue.serverTimestamp();
 
   firestore()
-    .collection('Foods')
+    .collection('stores')
+    .document(storename)
+    .collection('menu')
     .add(food)
     .then(snapshot => {
       food.id = snapshot.id;
       snapshot.set(food);
     })
     .then(() => addComplete(food))
+    .catch(error => console.log(error));
+}
+
+export function updateFood(food, storename, updateComplete) {
+  food.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+  console.log('Updating food in firebase');
+
+  firestore()
+    .collection('stores')
+    .document(storename)
+    .collection('menu')
+    .doc(food.id)
+    .set(food)
+    .then(() => updateComplete(food))
     .catch(error => console.log(error));
 }
