@@ -22,7 +22,7 @@ export default class Login extends Component {
       password: '',
       isLoading: false,
       loggedIn: false,
-      info: '',
+      seller: '',
     };
   }
 
@@ -50,18 +50,21 @@ export default class Login extends Component {
             .get()
             .then(doc => {
               const result = doc.data().seller;
-              this.state.info = result;
-              console.log(this.state.info);
+              this.state.seller = result;
+              console.log('seller= ' + this.state.seller);
+              this.setState({
+                isLoading: false,
+                email: '',
+                password: '',
+              });
+              if (this.state.seller == true)
+                this.props.navigation.navigate('Seller');
+              else this.props.navigation.navigate('Consumer');
             });
-          this.setState({
-            isLoading: false,
-            email: '',
-            password: '',
-          });
-          //console.log(this.state.info);
+
+          //console.log(this.state.seller);
           // var idTokenResult = auth().currentUser.getIdTokenResult();
           // console.log('User JWT: ', idTokenResult.token);
-          this.props.navigation.navigate('Profile');
         })
         .catch(error => this.setState({errorMessage: error.message}));
     }

@@ -12,18 +12,16 @@ import ProfilePage from '../screens/profile';
 import LoginStack from './loginstack';
 
 const Drawer = createDrawerNavigator();
-export default function DrawerNavigator() {
+export default function ConsumerDrawerNavigator() {
   const dimensions = useWindowDimensions();
 
   return (
-    <NavigationContainer>
-      <Drawer.Navigator
-        initialRouteName="User"
-        drawerType={dimensions.width >= 768 ? 'permanent' : 'front'}>
-        <Drawer.Screen name="User" component={loginStack} />
-        <Drawer.Screen name="Purchase History" component={histStack} />
-        <Drawer.Screen name="Stores" component={StoresStack} />
-      </Drawer.Navigator>
-    </NavigationContainer>
+    <Drawer.Navigator
+      initialRouteName="User"
+      drawerType={dimensions.width >= 768 ? 'permanent' : 'front'}>
+      <Drawer.Screen name="User" component={ProfilePage} />
+      <Drawer.Screen name="Purchase History" component={histStack} />
+      <Drawer.Screen name="Stores" component={StoresStack} />
+    </Drawer.Navigator>
   );
 }

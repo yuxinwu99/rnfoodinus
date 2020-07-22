@@ -7,8 +7,11 @@ import MenuButton from '../comp/MenuButton';
 import ProfilePage from '../screens/profile';
 import {ScreenStackHeaderBackButtonImage} from 'react-native-screens';
 import auth from '@react-native-firebase/auth';
+import {NavigationContainer} from '@react-navigation/native';
+import ConsumerDrawerNavigator from './drawer';
+import SellerDrawerNavigator from '../directory/s_drawer';
 
-const loginStack = ({navigation}) => {
+export default function LoginStack() {
   const Stack = createStackNavigator();
   isLoggedIn = auth().currentUser;
   return (
@@ -28,34 +31,29 @@ const loginStack = ({navigation}) => {
     //}}
     >
       <Stack.Screen
-        name="Profile"
-        component={ProfilePage}
-        options={{
-          headerLeft: () => (
-            <MenuImage
-              onPress={() => {
-                navigation.openDrawer();
-              }}
-            />
-          ),
-        }}
-      />
-      <Stack.Screen
         name="Login"
         component={Login}
-        options={{
-          headerLeft: () => (
-            <MenuImage
-              onPress={() => {
-                navigation.openDrawer();
-              }}
-            />
-          ),
-        }}
+        // options={{
+        //   headerLeft: () => (
+        //     <MenuImage
+        //       onPress={() => {
+        //         navigation.openDrawer();
+        //       }}
+        //     />
+        //   ),
+        // }}
       />
       <Stack.Screen name="Signup" component={SignUpContainer} />
+      <Stack.Screen
+        name="Consumer"
+        component={ConsumerDrawerNavigator}
+        options={{headerShown: false}}
+      />
+      <Stack.Screen
+        name="Seller"
+        component={SellerDrawerNavigator}
+        options={{headerShown: false}}
+      />
     </Stack.Navigator>
   );
-};
-
-export default loginStack;
+}

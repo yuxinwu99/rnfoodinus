@@ -111,19 +111,21 @@ export default class Stores extends React.Component {
 
     return (
       <View>
-        <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          placeholder="Search..."
-          value={this.state.search}
-          onChangeText={item => this.handlesearch(item)}
-        />
-        <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          placeholder="Title"
-          value={this.state.name}
-          onChangeText={name => this.handlename(name)}
-        />
-        <Button onPress={this.AddStore} title="Add" />
+        {
+          //  <TextInput
+          //   style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          //   placeholder="Search..."
+          //   value={this.state.search}
+          //   onChangeText={item => this.handlesearch(item)}
+          // />
+          // <TextInput
+          //   style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          //   placeholder="Title"
+          //   value={this.state.name}
+          //   onChangeText={name => this.handlename(name)}
+          // />
+          // <Button onPress={this.AddStore} title="Add" />
+        }
         <FlatList
           data={this.state.filtered}
           renderItem={({item}) => (

@@ -161,30 +161,40 @@ export default class Order extends React.Component {
       <View style={styles.container}>
         {console.log('key=' + key)}
         {console.log('')}
-        <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          placeholder="Item name"
-          value={this.state.name}
-          onChangeText={name => this.handlename(name)}
-        />
-        <TextInput
-          style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          placeholder="Item Price"
-          value={this.state.price}
-          onChangeText={price => this.handleprice(price)}
-        />
-        <Button
-          style={styles.button}
-          title="Add Menu"
-          onPress={() => {
-            this.AddMenu();
-          }}
-        />
+        {
+          // <TextInput
+          //   style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          //   placeholder="Item name"
+          //   value={this.state.name}
+          //   onChangeText={name => this.handlename(name)}
+          // />
+          // <TextInput
+          //   style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+          //   placeholder="Item Price"
+          //   value={this.state.price}
+          //   onChangeText={price => this.handleprice(price)}
+          // />
+          // <Button
+          //   style={styles.button}
+          //   title="Add Menu"
+          //   onPress={() => {
+          //     this.AddMenu();
+          //   }}
+          // />
+        }
         <TouchableOpacity
           onPress={() =>
             Linking.openURL('http://plus.codes/7QXC+MG,Singapore')
           }>
           <Text>open map</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          onPress={() =>
+            Linking.openURL(
+              'https://support.google.com/maps/answer/7047426?co=GENIE.Platform%3DAndroid&hl=en',
+            )
+          }>
+          <Text>how to get plus code</Text>
         </TouchableOpacity>
         <FlatList
           data={this.state.menu}
@@ -255,6 +265,7 @@ const styles = StyleSheet.create({
     // borderColor: '#aaaaaa',
     // borderWidth: 0.9,
     // borderRadius: 5,
+    //backgroundColor: 'blue',
     alignItems: 'center',
   },
   bigButton: {
@@ -266,12 +277,14 @@ const styles = StyleSheet.create({
     margin: 10,
     fontSize: 20,
     fontWeight: 'bold',
+    //backgroundColor: 'red',
   },
   text: {
     width: '50%',
     height: 30,
     margin: 10,
     fontSize: 20,
+    //backgroundColor: 'red',
   },
   itemContainer: {
     flex: 1,
