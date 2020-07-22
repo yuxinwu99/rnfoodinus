@@ -45,11 +45,12 @@ export default class sMenu extends Component {
 
   componentDidMount() {
     var newUser = auth().currentUser.displayName;
+    console.log(newUser);
     getFoods(newUser, this.onFoodsReceived);
     this.setState({
       user: newUser,
     });
-    console.log(user);
+    console.log(this.state.user);
   }
 
   showActionButton = () => (

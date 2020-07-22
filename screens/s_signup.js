@@ -54,9 +54,9 @@ export default class sSignup extends Component {
             });
           firestore()
             .collection('stores')
-            .doc(this.state.name)
+            .doc(this.state.displayName)
             .set({
-              name: this.state.name,
+              name: this.state.displayName,
               //id: this.state.size + 1,
             });
           console.log('User registered successfully!');

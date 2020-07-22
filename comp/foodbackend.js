@@ -94,7 +94,7 @@ export async function toggleSellerComp(storename, orderID) {
     .collection('order')
     .doc(storename)
     .collection('comorder')
-    .document(orderID)
+    .doc(orderID)
     .update({
       seller_comp: true,
     });
@@ -105,7 +105,7 @@ export async function toggleCustomerComp(storename, orderID) {
     .collection('order')
     .doc(storename)
     .collection('comorder')
-    .document(orderID)
+    .doc(orderID)
     .update({
       customer_comp: true,
     });
@@ -178,7 +178,7 @@ export function addFood(food, storename, addComplete) {
 
   firestore()
     .collection('stores')
-    .document(storename)
+    .doc(storename)
     .collection('menu')
     .add(food)
     .then(snapshot => {
@@ -195,7 +195,7 @@ export function updateFood(food, storename, updateComplete) {
 
   firestore()
     .collection('stores')
-    .document(storename)
+    .doc(storename)
     .collection('menu')
     .doc(food.id)
     .set(food)
