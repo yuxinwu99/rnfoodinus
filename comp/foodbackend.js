@@ -77,6 +77,50 @@ export async function getOrders(storename, ordersRetreived) {
     .collection('order')
     .doc(storename)
     .collection('comorder')
+    .where('customer_comp', '==', false)
+    .where('seller_comp', '==', false)
+    .orderBy('time')
+    .get();
+
+  snapshot.forEach(doc => {
+    const orderItem = doc.data();
+    orderItem.id = doc.id;
+    ordersList.push(orderItem);
+  });
+
+  ordersRetreived(ordersList);
+}
+
+export async function getSOrders(storename, ordersRetreived) {
+  var ordersList = [];
+
+  var snapshot = await firestore()
+    .collection('order')
+    .doc(storename)
+    .collection('comorder')
+    .where('customer_comp', '==', false)
+    .where('seller_comp', '==', true)
+    .orderBy('time')
+    .get();
+
+  snapshot.forEach(doc => {
+    const orderItem = doc.data();
+    orderItem.id = doc.id;
+    ordersList.push(orderItem);
+  });
+
+  ordersRetreived(ordersList);
+}
+
+export async function getCOrders(storename, ordersRetreived) {
+  var ordersList = [];
+
+  var snapshot = await firestore()
+    .collection('order')
+    .doc(storename)
+    .collection('comorder')
+    .where('customer_comp', '==', true)
+    .where('seller_comp', '==', true)
     .orderBy('time')
     .get();
 
@@ -94,9 +138,12 @@ export async function toggleSellerComp(storename, orderID) {
     .collection('order')
     .doc(storename)
     .collection('comorder')
-    .document(orderID)
+    .doc(orderID)
     .update({
       seller_comp: true,
+    })
+    .then(() => {
+      console.log('Seller_Comp Updated!');
     });
 }
 
@@ -105,9 +152,12 @@ export async function toggleCustomerComp(storename, orderID) {
     .collection('order')
     .doc(storename)
     .collection('comorder')
-    .document(orderID)
+    .doc(orderID)
     .update({
       customer_comp: true,
+    })
+    .then(() => {
+      console.log('Customer_comp Updated!');
     });
 }
 
@@ -178,7 +228,7 @@ export function addFood(food, storename, addComplete) {
 
   firestore()
     .collection('stores')
-    .document(storename)
+    .doc(storename)
     .collection('menu')
     .add(food)
     .then(snapshot => {
@@ -195,7 +245,7 @@ export function updateFood(food, storename, updateComplete) {
 
   firestore()
     .collection('stores')
-    .document(storename)
+    .doc(storename)
     .collection('menu')
     .doc(food.id)
     .set(food)
