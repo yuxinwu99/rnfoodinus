@@ -1,3 +1,4 @@
+//testing comment
 import React, {Component} from 'react';
 import {
   View,
@@ -16,6 +17,7 @@ export default class sMenu extends Component {
   state = {
     menuItems: [],
     indexer: 0,
+    user: '',
   };
   onFoodAdded = food => {
     this.setState(prevState => ({
