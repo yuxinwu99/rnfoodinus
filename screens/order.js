@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   TextInput,
   Button,
+  Linking,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 
@@ -179,6 +180,12 @@ export default class Order extends React.Component {
             this.AddMenu();
           }}
         />
+        <TouchableOpacity
+          onPress={() =>
+            Linking.openURL('http://plus.codes/7QXC+MG,Singapore')
+          }>
+          <Text>open map</Text>
+        </TouchableOpacity>
         <FlatList
           data={this.state.menu}
           renderItem={({item}) => (
