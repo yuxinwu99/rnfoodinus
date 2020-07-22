@@ -10,7 +10,8 @@ import auth from '@react-native-firebase/auth';
 import {NavigationContainer} from '@react-navigation/native';
 import ConsumerDrawerNavigator from './drawer';
 import SellerDrawerNavigator from '../directory/s_drawer';
-
+import Signup from '../screens/signup';
+import sSignup from '../screens/s_signup';
 export default function LoginStack() {
   const Stack = createStackNavigator();
   isLoggedIn = auth().currentUser;
@@ -43,7 +44,8 @@ export default function LoginStack() {
         //   ),
         // }}
       />
-      <Stack.Screen name="Signup" component={SignUpContainer} />
+      <Stack.Screen name="Seller Signup" component={sSignup} />
+      <Stack.Screen name="Customer Signup" component={Signup} />
       <Stack.Screen
         name="Consumer"
         component={ConsumerDrawerNavigator}

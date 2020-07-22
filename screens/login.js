@@ -100,10 +100,18 @@ export default class Login extends Component {
           onPress={() => this.userLogin()}
         />
 
+        <Text style={styles.lineText}>Don't have account?</Text>
+
         <Text
           style={styles.loginText}
-          onPress={() => this.props.navigation.navigate('Signup')}>
-          Don't have account? Click here to sign up
+          onPress={() => this.props.navigation.navigate('Customer Signup')}>
+          Click here to sign up if you want to order food!
+        </Text>
+
+        <Text
+          style={styles.loginText}
+          onPress={() => this.props.navigation.navigate('Seller Signup')}>
+          Click here to sign up if you're a food seller!
         </Text>
       </View>
     );
@@ -111,6 +119,16 @@ export default class Login extends Component {
 }
 
 const styles = StyleSheet.create({
+  lineText: {
+    color: '#ccc',
+    marginTop: 25,
+    textAlign: 'center',
+  },
+  loginText: {
+    color: '#3740FE',
+    marginTop: 25,
+    textAlign: 'center',
+  },
   container: {
     flex: 1,
     display: 'flex',
@@ -126,11 +144,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderColor: '#ccc',
     borderBottomWidth: 1,
-  },
-  loginText: {
-    color: '#3740FE',
-    marginTop: 25,
-    textAlign: 'center',
   },
   preloader: {
     left: 0,

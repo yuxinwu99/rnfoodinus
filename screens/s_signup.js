@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-//import firebaseDb from '../firebaseDb';
 import {
   StyleSheet,
   Text,
@@ -8,6 +7,8 @@ import {
   Button,
   Alert,
   ActivityIndicator,
+  TouchableOpacity,
+  Linking,
 } from 'react-native';
 import auth from '@react-native-firebase/auth';
 import firestore from '@react-native-firebase/firestore';
@@ -21,6 +22,7 @@ export default class sSignup extends Component {
       email: '',
       password: '',
       isLoading: false,
+      size: 0,
     };
   }
 
@@ -54,10 +56,16 @@ export default class sSignup extends Component {
             });
           firestore()
             .collection('stores')
+            .get()
+            .then(querySnapshot => {
+              this.state.size = querySnapshot.size;
+            });
+          firestore()
+            .collection('stores')
             .doc(this.state.displayName)
             .set({
               name: this.state.displayName,
-              //id: this.state.size + 1,
+              id: this.state.size + 1,
             });
           console.log('User registered successfully!');
           this.setState({
@@ -91,7 +99,7 @@ export default class sSignup extends Component {
         />
         <TextInput
           style={styles.inputStyle}
-          placeholder="Store Location"
+          placeholder="Google Maps Plus Code"
           value={this.state.location}
           onChangeText={val => this.updateInputVal(val, 'location')}
         />
@@ -114,7 +122,16 @@ export default class sSignup extends Component {
           title="Signup"
           onPress={() => this.registerUser()}
         />
-
+        <TouchableOpacity
+          onPress={() =>
+            Linking.openURL(
+              'https://support.google.com/maps/answer/7047426?co=GENIE.Platform%3DAndroid&hl=en',
+            )
+          }>
+          <Text style={styles.loginText}>
+            Click here to learn how to find your plus code!
+          </Text>
+        </TouchableOpacity>
         <Text
           style={styles.loginText}
           onPress={() => this.props.navigation.navigate('Login')}>
