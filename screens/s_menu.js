@@ -1,4 +1,5 @@
-import React, {Component} from 'react';
+//testing comment
+import React, { Component } from "react";
 import {
   View,
   Text,
@@ -6,20 +7,20 @@ import {
   Button,
   FlatList,
   SafeAreaView,
-} from 'react-native';
-import {getFoods} from '../comp/foodbackend';
-import ActionButton from 'react-native-action-button';
-import {ListItem, Divider} from 'react-native-elements';
-import auth from '@react-native-firebase/auth';
+} from "react-native";
+import { getFoods } from "../comp/foodbackend";
+import ActionButton from "react-native-action-button";
+import { ListItem, Divider } from "react-native-elements";
+import auth from "@react-native-firebase/auth";
 
 export default class sMenu extends Component {
   state = {
     menuItems: [],
     indexer: 0,
-    user: '',
+    user: "",
   };
-  onFoodAdded = food => {
-    this.setState(prevState => ({
+  onFoodAdded = (food) => {
+    this.setState((prevState) => ({
       menuItems: [...prevState.menuItems, food],
     }));
     this.props.navigation.popToTop();
@@ -29,15 +30,15 @@ export default class sMenu extends Component {
     var newMenuItems = [...this.state.menuItems];
     newMenuItems.splice(this.state.indexer, 1);
 
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       menuItems: (prevState.menuItems = newMenuItems),
     }));
 
     this.props.navigation.popToTop();
   };
 
-  onFoodsReceived = menuItems => {
-    this.setState(prevState => ({
+  onFoodsReceived = (menuItems) => {
+    this.setState((prevState) => ({
       menuItems: (prevState.menuItems = menuItems),
     }));
   };
@@ -55,7 +56,7 @@ export default class sMenu extends Component {
     <ActionButton
       buttonColor="blue"
       onPress={() =>
-        this.props.navigation.navigate('Add Item', {
+        this.props.navigation.navigate("Add Item", {
           foodAddedCallback: this.onFoodAdded,
           username: this.state.user,
         })
@@ -69,29 +70,29 @@ export default class sMenu extends Component {
         <FlatList
           data={this.state.menuItems}
           ItemSeparatorComponent={() => (
-            <Divider style={{backgroundColor: 'grey'}} />
+            <Divider style={{ backgroundColor: "grey" }} />
           )}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({item, index}) => {
+          renderItem={({ item, index }) => {
             return (
               <ListItem
                 containerStyle={styles.listItem}
                 titleStyle={styles.titleStyle}
                 title={item.name}
                 subtitleStyle={styles.subtitleStyle}
-                subtitle={'Price: $' + item.price}
+                subtitle={"Price: $" + item.price}
                 leftAvatar={{
-                  size: 'Large',
+                  size: "Large",
                   rounded: false,
                   source: item.image && {
                     uri: item.image,
                   },
                 }}
                 onPress={() => {
-                  this.setState(prevState => ({
+                  this.setState((prevState) => ({
                     indexer: (prevState.indexer = index),
                   }));
-                  this.props.navigation.navigate('Item Details', {
+                  this.props.navigation.navigate("Item Details", {
                     food: item,
                     username: this.state.user,
                     itemDeletedCallback: this.onItemDeleted,
@@ -125,8 +126,8 @@ const styles = StyleSheet.create({
   },
   textContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   titleStyle: {
     fontSize: 30,
@@ -140,6 +141,6 @@ const styles = StyleSheet.create({
   },
   emptySubtitle: {
     fontSize: 18,
-    fontStyle: 'italic',
+    fontStyle: "italic",
   },
 });
