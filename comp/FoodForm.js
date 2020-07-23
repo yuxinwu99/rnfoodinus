@@ -35,8 +35,9 @@ const FoodForm = props => {
         value={props.values.price}
         style={styles.formInput}
         keyboardType="numeric"
-        onChangeText={text => {
-          props.setFieldValue('price', text);
+        type={'number'}
+        onChangeText={num => {
+          props.setFieldValue('price', num);
         }}
       />
       <Text style={styles.validationText}> {props.errors.price}</Text>
@@ -88,8 +89,9 @@ export default withFormik({
   mapPropsToValues: ({food}) => ({
     name: food.name,
     description: food.description,
-    price: food.price,
+    price: parseFloat(food.price),
     imageUri: null,
+    count: parseFloat(0),
   }),
   enableReinitialize: true,
   validationSchema: props =>
@@ -104,7 +106,7 @@ export default withFormik({
         .required(),
       price: yup
         .number()
-        .max(30)
+        .max(100)
         .required(),
     }),
   handleSubmit: (values, {props}) => {
@@ -116,6 +118,7 @@ export default withFormik({
       values.id = props.food.id;
       values.createdAt = props.food.createdAt;
       values.image = props.food.image;
+      //values.count = parseFloat(0);
       uploadFood(values, props.onFoodUpdated, props.username, {updating: true});
     } else {
       uploadFood(values, props.onFoodAdded, props.username, {updating: false});

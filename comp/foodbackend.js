@@ -72,11 +72,55 @@ export async function getFoods(storename, foodsRetreived) {
 
 export async function getOrders(storename, ordersRetreived) {
   var ordersList = [];
+  console.log(storename);
+  var snapshot = await firestore()
+    .collection('order')
+    .doc(storename)
+    .collection('comorder')
+    .where('customer_comp', '==', false)
+    .where('seller_comp', '==', false)
+    .orderBy('time')
+    .get();
+  console.log('all orders for' + storename + '=' + snapshot);
+  snapshot.forEach(doc => {
+    const orderItem = doc.data();
+    orderItem.id = doc.id;
+    ordersList.push(orderItem);
+  });
+
+  ordersRetreived(ordersList);
+}
+
+export async function getSOrders(storename, ordersRetreived) {
+  var ordersList = [];
 
   var snapshot = await firestore()
     .collection('order')
     .doc(storename)
     .collection('comorder')
+    .where('customer_comp', '==', false)
+    .where('seller_comp', '==', true)
+    .orderBy('time')
+    .get();
+
+  snapshot.forEach(doc => {
+    const orderItem = doc.data();
+    orderItem.id = doc.id;
+    ordersList.push(orderItem);
+  });
+
+  ordersRetreived(ordersList);
+}
+
+export async function getCOrders(storename, ordersRetreived) {
+  var ordersList = [];
+
+  var snapshot = await firestore()
+    .collection('order')
+    .doc(storename)
+    .collection('comorder')
+    .where('customer_comp', '==', true)
+    .where('seller_comp', '==', true)
     .orderBy('time')
     .get();
 
@@ -97,6 +141,9 @@ export async function toggleSellerComp(storename, orderID) {
     .doc(orderID)
     .update({
       seller_comp: true,
+    })
+    .then(() => {
+      console.log('Seller_Comp Updated!');
     });
 }
 
@@ -108,6 +155,9 @@ export async function toggleCustomerComp(storename, orderID) {
     .doc(orderID)
     .update({
       customer_comp: true,
+    })
+    .then(() => {
+      console.log('Customer_comp Updated!');
     });
 }
 
@@ -183,6 +233,7 @@ export function addFood(food, storename, addComplete) {
     .add(food)
     .then(snapshot => {
       food.id = snapshot.id;
+      food.price = parseFloat(food.price);
       snapshot.set(food);
     })
     .then(() => addComplete(food))

@@ -109,7 +109,7 @@ export default class Order extends React.Component {
     }
   };
   confirmOrder = () => {
-    var temp = ['dummy1', 'dummy2'];
+    var temp = [];
     for (var i = 0; i < this.state.menu.length; i++) {
       if (this.state.menu[i].count != 0) {
         let orderDetails =

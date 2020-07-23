@@ -18,38 +18,65 @@ export default class Payment extends React.Component {
     var user = auth().currentUser;
     var currentTime = firebase.firestore.Timestamp.now();
     if (user != null) {
-      for (var i = 0; i < order.length; i++) {
-        if (order[i] != 'dummy1' && order[i] != 'dummy2') {
-          firestore()
-            .collection('users')
-            .doc(user.email)
-            .collection('Orders')
-            .add({
-              time: currentTime,
-              order: order[i],
-              cust_comp: false,
-              seller_comp: false,
-            });
+      firestore()
+        .collection('users')
+        .doc(user.email)
+        .collection('Orders')
+        .add({
+          time: currentTime,
+          order: order,
+          customer_comp: false,
+          seller_comp: false,
+        })
+        .then(snapshot => {
+          id = snapshot.id;
+          snapshot.update({id: id});
+        });
 
-          firestore()
-            .collection('order')
-            .doc(this.props.route.params.name)
-            .collection('comorder')
-            .add({
-              time: currentTime,
-              userEmail: user.email,
-              order: order[i],
-              cust_comp: false,
-              seller_comp: false,
-            })
-            .then(console.log('order sent' + order[i]));
-        }
-      }
+      firestore()
+        .collection('order')
+        .doc(this.props.route.params.name)
+        .collection('comorder')
+        .add({
+          time: currentTime,
+          order: order,
+          userEmail: user.email,
+          customer_comp: false,
+          seller_comp: false,
+        })
+        .then(snapshot => {
+          id = snapshot.id;
+          snapshot.update({id: id});
+        });
+
+      // firestore()
+      //   .collection('users')
+      //   .doc(user.email)
+      //   .collection('Orders')
+      //   .where('time', '==', currentTime)
+      //   .get()
+      //   .then(querySnapshot => {
+      //     querySnapshot.forEach(document => {
+      //       document.ref.collection('order').add({order});
+      //     });
+      //   });
+
+      // firestore()
+      //   .collection('order')
+      //   .doc(this.props.route.params.name)
+      //   .collection('comorder')
+      //   .where('time', '==', currentTime)
+      //   .where('user', '==', user.email)
+      //   .get()
+      //   .then(querySnapshot => {
+      //     querySnapshot.forEach(document => {
+      //       document.ref.collection('order').add({order});
+      //     });
+      //   });
     } else {
       this.props.navigation.navigate('User');
     }
   };
-
   render() {
     return (
       <View style={{flex: 1}}>

@@ -17,19 +17,19 @@ export default function LoginStack() {
   isLoggedIn = auth().currentUser;
   return (
     <Stack.Navigator
-    // initialRouteName="login"
-    // screenOptions={{
-    //   headerStyle: {
-    //     //backgroundColor: '#4caf50',
-    //   },
-    //   headerTintColor: '#333',
-    //   headerTitleStyle: {
-    //     fontWeight: 'bold',
-    //     fontSize: 20,
-    //     letterSpacing: 1,
-    //   },
-    //   //headerTitleAlign: 'center',
-    //}}
+      initialRouteName="Seller"
+      // screenOptions={{
+      //   headerStyle: {
+      //     //backgroundColor: '#4caf50',
+      //   },
+      //   headerTintColor: '#333',
+      //   headerTitleStyle: {
+      //     fontWeight: 'bold',
+      //     fontSize: 20,
+      //     letterSpacing: 1,
+      //   },
+      //   //headerTitleAlign: 'center',
+      //}}
     >
       <Stack.Screen
         name="Login"

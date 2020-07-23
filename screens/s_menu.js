@@ -1,4 +1,3 @@
-//testing comment
 import React, {Component} from 'react';
 import {
   View,
@@ -45,7 +44,6 @@ export default class sMenu extends Component {
 
   componentDidMount() {
     var newUser = auth().currentUser.displayName;
-    console.log(newUser);
     getFoods(newUser, this.onFoodsReceived);
     this.setState({
       user: newUser,
@@ -90,6 +88,7 @@ export default class sMenu extends Component {
                   },
                 }}
                 onPress={() => {
+                  console.log(this.state.user);
                   this.setState(prevState => ({
                     indexer: (prevState.indexer = index),
                   }));

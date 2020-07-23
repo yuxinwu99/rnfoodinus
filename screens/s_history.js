@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
 import {View, Text, StyleSheet, FlatList, SafeAreaView} from 'react-native';
 import {ListItem, Divider} from 'react-native-elements';
-import {getOrders, toggleSellerComp} from '../comp/foodbackend';
-import {auth} from 'firebase';
+import {getCOrders, toggleCustomerComp} from '../comp/foodbackend';
+import auth from '@react-native-firebase/auth';
 
 export default class sOrders extends Component {
   state = {
     orderItems: [],
     indexer: 0,
+    user: '',
   };
 
   onOrdersReceived = orderItems => {
@@ -17,12 +18,14 @@ export default class sOrders extends Component {
   };
 
   componentDidMount() {
-    var user = auth().currentUser;
-    getOrders(user.storename, this.onOrdersReceived);
+    var newUser = auth().currentUser.displayName;
+    getCOrders(newUser, this.onOrdersReceived);
+    this.setState({
+      user: newUser,
+    });
   }
 
   render() {
-    var user = auth().currentUser;
     return this.state.orderItems.length > 0 ? (
       <SafeAreaView style={styles.container}>
         <FlatList
@@ -41,12 +44,12 @@ export default class sOrders extends Component {
                 subtitle={'Order Time: ' + item.time}
                 subtitleStyle={styles.subtitleStyle}
                 subtitle={'Customer: ' + item.useremail}
-                onPress={() => {
-                  toggleSellerComp(user.storename, index);
-                  this.setState(prevState => ({
-                    indexer: (prevState.indexer = index),
-                  }));
-                }}
+                // onPress={() => {
+                //   toggleCustomerComp(user, item.id);
+                //   this.setState(prevState => ({
+                //     indexer: (prevState.indexer = index),
+                //   }));
+                // }}
               />
             );
           }}

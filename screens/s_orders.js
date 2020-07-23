@@ -3,11 +3,13 @@ import {View, Text, StyleSheet, FlatList, SafeAreaView} from 'react-native';
 import {ListItem, Divider} from 'react-native-elements';
 import {getOrders, toggleSellerComp} from '../comp/foodbackend';
 import auth from '@react-native-firebase/auth';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default class sOrders extends Component {
   state = {
     orderItems: [],
     indexer: 0,
+    user: '',
   };
 
   onOrdersReceived = orderItems => {
@@ -34,22 +36,34 @@ export default class sOrders extends Component {
           )}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item, index}) => {
+            console.log(item.order);
             return (
-              <ListItem
-                containerStyle={styles.listItem}
-                titleStyle={styles.titleStyle}
-                title={item.order}
-                subtitleStyle={styles.subtitleStyle}
-                subtitle={'Order Time: ' + item.time}
-                subtitleStyle={styles.subtitleStyle}
-                subtitle={'Customer: ' + item.useremail}
-                onPress={() => {
-                  toggleSellerComp(user, index);
-                  this.setState(prevState => ({
-                    indexer: (prevState.indexer = index),
-                  }));
-                }}
-              />
+              <View>
+                <TouchableOpacity
+                  style={{backgroundColor: 'grey'}}
+                  onPress={() => {
+                    toggleSellerComp(this.state.user, item.id);
+                    this.setState(prevState => ({
+                      indexer: (prevState.indexer = index),
+                    }));
+                    this.forceUpdate();
+                  }}>
+                  <FlatList
+                    data={item.order}
+                    renderItem={({item}) => <ListItem title={item} />}
+                    keyExtractor={item => item}
+                  />
+                  <ListItem
+                    containerStyle={styles.listItem}
+                    titleStyle={styles.titleStyle}
+                    title={item.order}
+                    subtitleStyle={styles.subtitleStyle}
+                    subtitle={'Order Time: ' + item.time}
+                    subtitleStyle={styles.subtitleStyle}
+                    subtitle={'Customer: ' + item.userEmail}
+                  />
+                </TouchableOpacity>
+              </View>
             );
           }}
         />
