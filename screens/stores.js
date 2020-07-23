@@ -112,12 +112,12 @@ export default class Stores extends React.Component {
     return (
       <View>
         {
-          //  <TextInput
-          //   style={{height: 40, borderColor: 'gray', borderWidth: 1}}
-          //   placeholder="Search..."
-          //   value={this.state.search}
-          //   onChangeText={item => this.handlesearch(item)}
-          // />
+          <TextInput
+            style={{height: 40, borderColor: 'gray', borderWidth: 1}}
+            placeholder="Search..."
+            value={this.state.search}
+            onChangeText={item => this.handlesearch(item)}
+          />
           // <TextInput
           //   style={{height: 40, borderColor: 'gray', borderWidth: 1}}
           //   placeholder="Title"
