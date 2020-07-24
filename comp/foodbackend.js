@@ -1,8 +1,8 @@
-import storage from '@react-native-firebase/storage';
-import firebase from '@react-native-firebase/app';
-import firestore from '@react-native-firebase/firestore';
-import 'react-native-get-random-values';
-import {v4 as uuidv4} from 'uuid';
+import storage from "@react-native-firebase/storage";
+import firebase from "@react-native-firebase/app";
+import firestore from "@react-native-firebase/firestore";
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
 
 // export function login({email, password}) {
 //   firebase
@@ -42,26 +42,32 @@ export function deleteFood(food, storename, deleteComplete) {
   console.log(food);
 
   firestore()
-    .collection('stores')
+    .collection("stores")
     .doc(storename)
-    .collection('menu')
+    .collection("menu")
     .doc(food.id)
     .delete()
     .then(() => deleteComplete())
-    .catch(error => console.log(error));
+    .catch((error) => console.log(error));
+}
+
+export async function getProfile(storeEmail, profileRetreived) {
+  var snapshot = await firestore().collection("users").doc(storeEmail).get();
+
+  profileRetreived(snapshot.data());
 }
 
 export async function getFoods(storename, foodsRetreived) {
   var foodList = [];
 
   var snapshot = await firestore()
-    .collection('stores')
+    .collection("stores")
     .doc(storename)
-    .collection('menu')
-    .orderBy('createdAt')
+    .collection("menu")
+    .orderBy("createdAt")
     .get();
 
-  snapshot.forEach(doc => {
+  snapshot.forEach((doc) => {
     const foodItem = doc.data();
     foodItem.id = doc.id;
     foodList.push(foodItem);
@@ -74,15 +80,15 @@ export async function getOrders(storename, ordersRetreived) {
   var ordersList = [];
   console.log(storename);
   var snapshot = await firestore()
-    .collection('order')
+    .collection("order")
     .doc(storename)
-    .collection('comorder')
-    .where('customer_comp', '==', false)
-    .where('seller_comp', '==', false)
-    .orderBy('time')
+    .collection("comorder")
+    .where("customer_comp", "==", false)
+    .where("seller_comp", "==", false)
+    .orderBy("time")
     .get();
-  console.log('all orders for' + storename + '=' + snapshot);
-  snapshot.forEach(doc => {
+  console.log("all orders for" + storename + "=" + snapshot);
+  snapshot.forEach((doc) => {
     const orderItem = doc.data();
     orderItem.id = doc.id;
     ordersList.push(orderItem);
@@ -95,15 +101,15 @@ export async function getSOrders(storename, ordersRetreived) {
   var ordersList = [];
 
   var snapshot = await firestore()
-    .collection('order')
+    .collection("order")
     .doc(storename)
-    .collection('comorder')
-    .where('customer_comp', '==', false)
-    .where('seller_comp', '==', true)
-    .orderBy('time')
+    .collection("comorder")
+    .where("customer_comp", "==", false)
+    .where("seller_comp", "==", true)
+    .orderBy("time")
     .get();
 
-  snapshot.forEach(doc => {
+  snapshot.forEach((doc) => {
     const orderItem = doc.data();
     orderItem.id = doc.id;
     ordersList.push(orderItem);
@@ -116,15 +122,15 @@ export async function getCOrders(storename, ordersRetreived) {
   var ordersList = [];
 
   var snapshot = await firestore()
-    .collection('order')
+    .collection("order")
     .doc(storename)
-    .collection('comorder')
-    .where('customer_comp', '==', true)
-    .where('seller_comp', '==', true)
-    .orderBy('time')
+    .collection("comorder")
+    .where("customer_comp", "==", true)
+    .where("seller_comp", "==", true)
+    .orderBy("time")
     .get();
 
-  snapshot.forEach(doc => {
+  snapshot.forEach((doc) => {
     const orderItem = doc.data();
     orderItem.id = doc.id;
     ordersList.push(orderItem);
@@ -135,36 +141,36 @@ export async function getCOrders(storename, ordersRetreived) {
 
 export async function toggleSellerComp(storename, orderID) {
   await firestore()
-    .collection('order')
+    .collection("order")
     .doc(storename)
-    .collection('comorder')
+    .collection("comorder")
     .doc(orderID)
     .update({
       seller_comp: true,
     })
     .then(() => {
-      console.log('Seller_Comp Updated!');
+      console.log("Seller_Comp Updated!");
     });
 }
 
 export async function toggleCustomerComp(storename, orderID) {
   await firestore()
-    .collection('order')
+    .collection("order")
     .doc(storename)
-    .collection('comorder')
+    .collection("comorder")
     .doc(orderID)
     .update({
       customer_comp: true,
     })
     .then(() => {
-      console.log('Customer_comp Updated!');
+      console.log("Customer_comp Updated!");
     });
 }
 
-export function uploadFood(food, onFoodUploaded, username, {updating}) {
+export function uploadFood(food, onFoodUploaded, username, { updating }) {
   if (food.imageUri) {
-    const fileExtension = food.imageUri.split('.').pop();
-    console.log('EXT: ' + fileExtension);
+    const fileExtension = food.imageUri.split(".").pop();
+    console.log("EXT: " + fileExtension);
 
     var uuid = uuidv4();
 
@@ -175,49 +181,48 @@ export function uploadFood(food, onFoodUploaded, username, {updating}) {
 
     storageRef.putFile(food.imageUri).on(
       firebase.storage.TaskEvent.STATE_CHANGED,
-      snapshot => {
-        console.log('snapshot: ' + snapshot.state);
+      (snapshot) => {
+        console.log("snapshot: " + snapshot.state);
         console.log(
-          'progress: ' +
-            (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
+          "progress: " + (snapshot.bytesTransferred / snapshot.totalBytes) * 100
         );
 
         if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
-          console.log('Success');
+          console.log("Success");
         }
       },
-      error => {
+      (error) => {
         unsubscribe();
-        console.log('image upload error: ' + error.toString());
+        console.log("image upload error: " + error.toString());
       },
       () => {
-        storageRef.getDownloadURL().then(downloadUrl => {
-          console.log('File available at: ' + downloadUrl);
+        storageRef.getDownloadURL().then((downloadUrl) => {
+          console.log("File available at: " + downloadUrl);
 
           food.image = downloadUrl;
 
           delete food.imageUri;
 
           if (updating) {
-            console.log('Updating....');
+            console.log("Updating....");
             updateFood(food, username, onFoodUploaded);
           } else {
-            console.log('adding...');
+            console.log("adding...");
             addFood(food, username, onFoodUploaded);
           }
         });
-      },
+      }
     );
   } else {
-    console.log('Skipping image upload');
+    console.log("Skipping image upload");
 
     delete food.imageUri;
 
     if (updating) {
-      console.log('Updating....');
+      console.log("Updating....");
       updateFood(food, username, onFoodUploaded);
     } else {
-      console.log('adding...');
+      console.log("adding...");
       addFood(food, username, onFoodUploaded);
     }
   }
@@ -227,29 +232,92 @@ export function addFood(food, storename, addComplete) {
   food.createdAt = firebase.firestore.FieldValue.serverTimestamp();
 
   firestore()
-    .collection('stores')
+    .collection("stores")
     .doc(storename)
-    .collection('menu')
+    .collection("menu")
     .add(food)
-    .then(snapshot => {
+    .then((snapshot) => {
       food.id = snapshot.id;
       food.price = parseFloat(food.price);
       snapshot.set(food);
     })
     .then(() => addComplete(food))
-    .catch(error => console.log(error));
+    .catch((error) => console.log(error));
 }
 
 export function updateFood(food, storename, updateComplete) {
   food.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
-  console.log('Updating food in firebase');
+  console.log("Updating food in firebase");
 
   firestore()
-    .collection('stores')
+    .collection("stores")
     .doc(storename)
-    .collection('menu')
+    .collection("menu")
     .doc(food.id)
     .set(food)
     .then(() => updateComplete(food))
-    .catch(error => console.log(error));
+    .catch((error) => console.log(error));
+}
+
+export function uploadProfile(profile, onProfileUploaded, userEmail) {
+  if (profile.imageUri) {
+    const fileExtension = profile.imageUri.split(".").pop();
+    console.log("EXT: " + fileExtension);
+
+    var uuid = uuidv4();
+
+    const fileName = `${uuid}.${fileExtension}`;
+    console.log(fileName);
+
+    var storageRef = firebase.storage().ref(`profile/images/${fileName}`);
+
+    storageRef.putFile(profile.imageUri).on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+      (snapshot) => {
+        console.log("snapshot: " + snapshot.state);
+        console.log(
+          "progress: " + (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+        );
+
+        if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
+          console.log("Success");
+        }
+      },
+      (error) => {
+        unsubscribe();
+        console.log("image upload error: " + error.toString());
+      },
+      () => {
+        storageRef.getDownloadURL().then((downloadUrl) => {
+          console.log("File available at: " + downloadUrl);
+
+          profile.image = downloadUrl;
+
+          delete profile.imageUri;
+
+          console.log("Updating....");
+          updateFood(profile, userEmail, onProfileUploaded);
+        });
+      }
+    );
+  } else {
+    console.log("Skipping image upload");
+
+    delete profile.imageUri;
+
+    console.log("Updating....");
+    updateFood(profile, userEmail, onProfileUploaded);
+  }
+}
+
+export function updateProfile(profile, userEmail, updateComplete) {
+  profile.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+  console.log("Updating profile in firebase");
+
+  firestore()
+    .collection("users")
+    .doc(userEmail)
+    .set(profile)
+    .then(() => updateComplete(profile))
+    .catch((error) => console.log(error));
 }
