@@ -1,13 +1,13 @@
-import React from "react";
-import { StyleSheet, View, TextInput, Text, Button } from "react-native";
-import { withFormik } from "formik";
-import * as yup from "yup";
-import { updateProfile, uploadProfile } from "./foodbackend";
-import FoodImagePicker from "./ImagePicker";
+import React from 'react';
+import {StyleSheet, View, TextInput, Text, Button} from 'react-native';
+import {withFormik} from 'formik';
+import * as yup from 'yup';
+import {updateProfile, uploadProfile} from './foodbackend';
+import FoodImagePicker from './ImagePicker';
 
-const ProfileForm = (props) => {
-  setProfileImage = (image) => {
-    props.setFieldValue("imageUri", image.uri);
+const ProfileForm = props => {
+  setProfileImage = image => {
+    props.setFieldValue('imageUri', image.uri);
   };
 
   return (
@@ -20,8 +20,8 @@ const ProfileForm = (props) => {
         value={props.values.name}
         style={styles.longFormInput}
         placeholder="Name"
-        onChangeText={(text) => {
-          props.setFieldValue("name", text);
+        onChangeText={text => {
+          props.setFieldValue('name', text);
         }}
       />
       <Text style={styles.validationText}> {props.errors.name}</Text>
@@ -29,8 +29,8 @@ const ProfileForm = (props) => {
         value={props.values.description}
         style={styles.longFormInput}
         placeholder="Short Description"
-        onChangeText={(text) => {
-          props.setFieldValue("description", text);
+        onChangeText={text => {
+          props.setFieldValue('description', text);
         }}
       />
       <Text style={styles.validationText}> {props.errors.description}</Text>
@@ -38,8 +38,8 @@ const ProfileForm = (props) => {
         value={props.values.location}
         style={styles.longFormInput}
         placeholder="Google Plus Code"
-        onChangeText={(text) => {
-          props.setFieldValue("location", text);
+        onChangeText={text => {
+          props.setFieldValue('location', text);
         }}
       />
       <Text style={styles.validationText}> {props.errors.location}</Text>
@@ -51,36 +51,36 @@ const ProfileForm = (props) => {
 
 const styles = StyleSheet.create({
   row: {
-    justifyContent: "space-between",
-    alignSelf: "stretch",
-    flexDirection: "row",
-    alignItems: "center",
+    justifyContent: 'space-between',
+    alignSelf: 'stretch',
+    flexDirection: 'row',
+    alignItems: 'center',
     marginBottom: 32,
   },
   container: {
     width: 300,
-    alignSelf: "center",
-    alignItems: "center",
+    alignSelf: 'center',
+    alignItems: 'center',
     marginTop: 32,
   },
   formInput: {
-    borderColor: "#B5B4BC",
+    borderColor: '#B5B4BC',
     borderWidth: 1,
     padding: 8,
     height: 50,
-    color: "black",
-    width: "75%",
+    color: 'black',
+    width: '75%',
     marginBottom: 16,
     marginTop: 16,
   },
   validationText: {
-    color: "red",
+    color: 'red',
   },
   longFormInput: {
-    width: "100%",
+    width: '100%',
     height: 50,
-    color: "black",
-    borderColor: "#B5B4BC",
+    color: 'black',
+    borderColor: '#B5B4BC',
     borderWidth: 1,
     padding: 8,
     margin: 16,
@@ -88,27 +88,35 @@ const styles = StyleSheet.create({
 });
 
 export default withFormik({
-  mapPropsToValues: ({ profile }) => ({
+  mapPropsToValues: ({profile}) => ({
     name: profile.name,
     description: profile.description,
     location: profile.location,
     imageUri: null,
   }),
   enableReinitialize: true,
-  validationSchema: (props) =>
+  validationSchema: props =>
     yup.object().shape({
-      name: yup.string().max(30).required(),
-      description: yup.string().max(100).required(),
-      location: yup.string().max(100).required(),
+      name: yup
+        .string()
+        .max(30)
+        .required(),
+      description: yup
+        .string()
+        .max(100)
+        .required(),
+      location: yup
+        .string()
+        .max(100)
+        .required(),
     }),
-  handleSubmit: (values, { props }) => {
+  handleSubmit: (values, {props}) => {
     console.log(props);
 
     console.log(values);
 
-    values.createdAt = props.profile.createdAt;
+    //values.createdAt = props.profile.createdAt;
     values.image = props.profile.image;
-    //values.count = parseFloat(0);
     uploadProfile(values, props.onProfileUpdated, props.email);
   },
 })(ProfileForm);

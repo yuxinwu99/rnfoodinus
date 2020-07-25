@@ -1,23 +1,37 @@
-import React, { Component } from "react";
-import { View, Text, FlatList, StyleSheet, Alert, Image } from "react-native";
-import { Divider, Icon } from "react-native-elements";
-import auth from "@react-native-firebase/auth";
-import getProfile from "../comp/foodbackend";
+import React, {Component} from 'react';
+import {View, Text, FlatList, StyleSheet, Alert, Image} from 'react-native';
+import {Divider, Icon} from 'react-native-elements';
+import auth from '@react-native-firebase/auth';
+import {getProfile} from '../comp/foodbackend';
+import firebase from '@react-native-firebase/app';
+import firestore from '@react-native-firebase/firestore';
 
 export default class sellerProfilePage extends Component {
   state = {
-    currentEmail: "",
+    currentEmail: '',
     profile: [],
   };
 
-  onProfileReceived = (profile) => {
-    this.setState((prevState) => ({
+  update() {
+    firestore()
+      .collection('users')
+      .doc(currentEmail)
+      .onSnapshot(function(doc) {
+        console.log('current data: ', doc.data());
+      });
+  }
+
+  onProfileReceived = profile => {
+    this.setState(prevState => ({
       profile: (prevState.profile = profile),
     }));
+    console.log('profile: ', this.state.profile);
+    this.forceUpdate();
   };
 
   componentDidMount() {
-    var userEmail = auth().currentUser.Email;
+    var userEmail = auth().currentUser.email;
+    console.log(userEmail);
     getProfile(userEmail, this.onProfileReceived);
     this.setState({
       currentEmail: userEmail,
@@ -34,7 +48,7 @@ export default class sellerProfilePage extends Component {
             name="ios-create"
             type="ionicon"
             onPress={() =>
-              this.props.navigation.navigate("Edit Profile", {
+              this.props.navigation.navigate('Edit Profile', {
                 profile: this.state.profile,
                 email: this.state.currentEmail,
               })
@@ -48,22 +62,22 @@ export default class sellerProfilePage extends Component {
               auth()
                 .signOut()
                 .then(() => {
-                  console.log("User signed out!");
+                  console.log('User signed out!');
                 });
-              this.props.navigation.navigate("Login");
+              this.props.navigation.navigate('Login');
             }}
           />
         </View>
         <Image
           style={styles.image}
-          source={this.profile.image && { uri: this.profile.image }}
+          source={this.state.profile.image && {uri: this.state.profile.image}}
         />
-        <Text style={styles.headerText}>{this.profile.name}</Text>
+        <Text style={styles.headerText}>{this.state.profile.name}</Text>
         <Text style={styles.categoryText}>
-          Short Description: {this.profile.description}
+          Short Description: {this.state.profile.description}
         </Text>
         <Text style={styles.categoryText}>
-          Location: {this.profile.location}
+          Location: {this.state.profile.location}
         </Text>
       </View>
     );
@@ -76,14 +90,14 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   image: {
-    width: "80%",
+    width: '80%',
     aspectRatio: 2,
     marginBottom: 16,
   },
   row: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    width: "100%",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
     marginTop: 16,
     marginBottom: 16,
     paddingLeft: 16,
@@ -94,22 +108,22 @@ const styles = StyleSheet.create({
     marginBottom: 32,
   },
   ingredientText: {
-    fontStyle: "italic",
+    fontStyle: 'italic',
     fontSize: 18,
     marginBottom: 32,
   },
-  ingredientItemText: {
+  ingredientprofileText: {
     fontSize: 16,
-    alignSelf: "center",
+    alignSelf: 'center',
     marginBottom: 16,
     marginTop: 16,
   },
   container: {
-    alignItems: "center",
+    alignItems: 'center',
   },
   listContainer: {
     borderWidth: 0.5,
     width: 200,
-    borderColor: "grey",
+    borderColor: 'grey',
   },
 });
