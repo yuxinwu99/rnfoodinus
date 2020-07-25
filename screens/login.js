@@ -69,7 +69,23 @@ export default class Login extends Component {
         .catch(error => this.setState({errorMessage: error.message}));
     }
   };
-
+  componentDidMount() {
+    var user = auth().currentUser.email;
+    if (user != null) {
+      firestore()
+        .collection('users')
+        .doc(user)
+        .get()
+        .then(doc => {
+          const result = doc.data().seller;
+          this.state.seller = result;
+          console.log('seller= ' + this.state.seller);
+          if (this.state.seller == true)
+            this.props.navigation.navigate('Seller');
+          else this.props.navigation.navigate('Consumer');
+        });
+    }
+  }
   render() {
     if (this.state.isLoading) {
       return (
