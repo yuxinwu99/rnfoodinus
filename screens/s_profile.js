@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import {View, Text, FlatList, StyleSheet, Alert, Image} from 'react-native';
 import {Divider, Icon} from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
-import getProfile from '../comp/foodbackend';
+import {getProfile} from '../comp/foodbackend';
+import firebase from '@react-native-firebase/app';
+import firestore from '@react-native-firebase/firestore';
 
 export default class sellerProfilePage extends Component {
   state = {
@@ -10,14 +12,26 @@ export default class sellerProfilePage extends Component {
     profile: [],
   };
 
+  update() {
+    firestore()
+      .collection('users')
+      .doc(currentEmail)
+      .onSnapshot(function(doc) {
+        console.log('current data: ', doc.data());
+      });
+  }
+
   onProfileReceived = profile => {
     this.setState(prevState => ({
       profile: (prevState.profile = profile),
     }));
+    console.log('profile: ', this.state.profile);
+    this.forceUpdate();
   };
 
   componentDidMount() {
-    var userEmail = auth().currentUser.Email;
+    var userEmail = auth().currentUser.email;
+    console.log(userEmail);
     getProfile(userEmail, this.onProfileReceived);
     this.setState({
       currentEmail: userEmail,
@@ -98,7 +112,7 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 32,
   },
-  ingredientItemText: {
+  ingredientprofileText: {
     fontSize: 16,
     alignSelf: 'center',
     marginBottom: 16,

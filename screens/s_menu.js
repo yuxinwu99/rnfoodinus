@@ -40,6 +40,7 @@ export default class sMenu extends Component {
     this.setState(prevState => ({
       menuItems: (prevState.menuItems = menuItems),
     }));
+    console.log('menuItems: ', menuItems);
   };
 
   componentDidMount() {
@@ -73,6 +74,7 @@ export default class sMenu extends Component {
           )}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item, index}) => {
+            console.log('item: ', item);
             return (
               <ListItem
                 containerStyle={styles.listItem}
