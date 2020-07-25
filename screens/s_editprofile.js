@@ -23,7 +23,6 @@ export default class editProfileScreen extends Component {
   onProfileUpdated = profile => {
     console.log(profile);
     this.props.navigation.popToTop();
-    this.forceUpdate();
   };
 
   render() {

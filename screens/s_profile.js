@@ -1,10 +1,19 @@
 import React, {Component} from 'react';
-import {View, Text, FlatList, StyleSheet, Alert, Image} from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  StyleSheet,
+  Alert,
+  Image,
+  Button,
+} from 'react-native';
 import {Divider, Icon} from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import {getProfile} from '../comp/foodbackend';
 import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default class sellerProfilePage extends Component {
   state = {
@@ -26,7 +35,6 @@ export default class sellerProfilePage extends Component {
       profile: (prevState.profile = profile),
     }));
     console.log('profile: ', this.state.profile);
-    this.forceUpdate();
   };
 
   componentDidMount() {
@@ -37,6 +45,13 @@ export default class sellerProfilePage extends Component {
       currentEmail: userEmail,
     });
     console.log(this.state.currentEmail);
+
+    this.props.navigation.addListener('focus', payload => {
+      getProfile(auth().currentUser.email, this.onProfileReceived);
+      this.setState({
+        currentEmail: auth().currentUser.email,
+      });
+    });
   }
 
   render() {
