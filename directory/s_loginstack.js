@@ -1,8 +1,6 @@
 import {createStackNavigator, HeaderBackButton} from '@react-navigation/stack';
 import sSignup from '../screens/s_signup';
-import Signup from '../screens/signup';
 import sLogin from '../screens/s_login';
-import Login from '../screens/login';
 import React from 'react';
 import MenuImage from '../comp/MenuImage';
 import MenuButton from '../comp/MenuButton';
@@ -27,7 +25,7 @@ const sloginStack = ({navigation}) => {
     >
       <Stack.Screen
         name="Login"
-        component={Login}
+        component={sLogin}
         options={{
           headerLeft: () => (
             <MenuImage
@@ -38,8 +36,7 @@ const sloginStack = ({navigation}) => {
           ),
         }}
       />
-      <Stack.Screen name="Seller Signup" component={sSignup} />
-      <Stack.Screen name="Customer Signup" component={Signup} />
+      <Stack.Screen name="Signup" component={sSignup} />
     </Stack.Navigator>
   );
 };

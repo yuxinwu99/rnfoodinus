@@ -45,7 +45,7 @@ export default class sOrders extends Component {
                 subtitleStyle={styles.subtitleStyle}
                 subtitle={'Customer: ' + item.useremail}
                 onPress={() => {
-                  toggleCustomerComp(user, item.id);
+                  toggleCustomerComp(this.state.user, item.id);
                   this.setState(prevState => ({
                     indexer: (prevState.indexer = index),
                   }));

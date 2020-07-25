@@ -40,6 +40,7 @@ export default class sMenu extends Component {
     this.setState(prevState => ({
       menuItems: (prevState.menuItems = menuItems),
     }));
+    //console.log('menuItems: ', menuItems);
   };
 
   componentDidMount() {
@@ -48,7 +49,7 @@ export default class sMenu extends Component {
     this.setState({
       user: newUser,
     });
-    console.log(user);
+    //console.log(this.state.user);
   }
 
   showActionButton = () => (
@@ -73,6 +74,7 @@ export default class sMenu extends Component {
           )}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item, index}) => {
+            //console.log('item: ', item);
             return (
               <ListItem
                 containerStyle={styles.listItem}
@@ -88,6 +90,7 @@ export default class sMenu extends Component {
                   },
                 }}
                 onPress={() => {
+                  //console.log(this.state.user);
                   this.setState(prevState => ({
                     indexer: (prevState.indexer = index),
                   }));

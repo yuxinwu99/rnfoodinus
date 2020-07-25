@@ -6,7 +6,8 @@ export default class addFoodScreen extends Component {
     food: {
       name: '',
       description: '',
-      price: '',
+      price: parseFloat(0),
+      count: parseFloat(0),
     },
   };
 

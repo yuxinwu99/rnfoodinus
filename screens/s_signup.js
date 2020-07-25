@@ -51,7 +51,6 @@ export default class sSignup extends Component {
             .set({
               email: this.state.email,
               name: this.state.displayName,
-              location: this.state.location,
               seller: true,
             });
           firestore()
@@ -66,6 +65,10 @@ export default class sSignup extends Component {
             .set({
               name: this.state.displayName,
               id: this.state.size + 1,
+              location: this.state.location,
+              description: 'xxxxxx',
+              image:
+                'https://firebasestorage.googleapis.com/v0/b/foodinus-e8ce8.appspot.com/o/sample%20image.jpg?alt=media&token=797f5e86-43bf-458f-8576-6d6e0d7540fa',
             });
           console.log('User registered successfully!');
           this.setState({

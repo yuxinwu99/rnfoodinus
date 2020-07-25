@@ -2,26 +2,21 @@ import React from 'react';
 import {StyleSheet, View, TextInput, Text, Button} from 'react-native';
 import {withFormik} from 'formik';
 import * as yup from 'yup';
-import {addFood, updateFood, uploadFood} from './foodbackend';
+import {updateProfile, uploadProfile} from './foodbackend';
 import FoodImagePicker from './ImagePicker';
 
-const FoodForm = props => {
-  setFoodImage = image => {
+const ProfileForm = props => {
+  setProfileImage = image => {
     props.setFieldValue('imageUri', image.uri);
   };
 
   return (
     <View style={styles.container}>
-      <FoodImagePicker image={props.food.image} onImagePicked={setFoodImage} />
-      <TextInput
-        value={props.values.name}
-        style={styles.longFormInput}
-        placeholder="Name"
-        onChangeText={text => {
-          props.setFieldValue('name', text);
-        }}
+      <FoodImagePicker
+        image={props.profile.image}
+        onImagePicked={setProfileImage}
       />
-      <Text style={styles.validationText}> {props.errors.name}</Text>
+      <Text style={styles.titletext}> {props.values.name} </Text>
       <TextInput
         value={props.values.description}
         style={styles.longFormInput}
@@ -32,15 +27,14 @@ const FoodForm = props => {
       />
       <Text style={styles.validationText}> {props.errors.description}</Text>
       <TextInput
-        value={props.values.price}
-        style={styles.formInput}
-        keyboardType="numeric"
-        type={'number'}
+        value={props.values.location}
+        style={styles.longFormInput}
+        placeholder="Google Plus Code"
         onChangeText={text => {
-          props.setFieldValue('price', text);
+          props.setFieldValue('location', text);
         }}
       />
-      <Text style={styles.validationText}> {props.errors.price}</Text>
+      <Text style={styles.validationText}> {props.errors.location}</Text>
 
       <Button title="Submit" onPress={() => props.handleSubmit()} />
     </View>
@@ -54,6 +48,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 32,
+  },
+  titletext: {
+    textAlign: 'center',
+    fontSize: 20,
+    marginTop: 10,
+    marginBottom: 10,
   },
   container: {
     width: 300,
@@ -86,42 +86,30 @@ const styles = StyleSheet.create({
 });
 
 export default withFormik({
-  mapPropsToValues: ({food}) => ({
-    name: food.name,
-    description: food.description,
-    price: parseFloat(food.price),
+  mapPropsToValues: ({profile}) => ({
+    name: profile.name,
+    description: profile.description,
+    location: profile.location,
     imageUri: null,
-    count: parseFloat(0),
   }),
   enableReinitialize: true,
   validationSchema: props =>
     yup.object().shape({
-      name: yup
-        .string()
-        .max(30)
-        .required(),
       description: yup
         .string()
         .max(100)
         .required(),
-      price: yup
-        .number()
+      location: yup
+        .string()
         .max(100)
         .required(),
     }),
   handleSubmit: (values, {props}) => {
     console.log(props);
-
     console.log(values);
 
-    if (props.food.id) {
-      values.id = props.food.id;
-      values.createdAt = props.food.createdAt;
-      values.image = props.food.image;
-      //values.count = parseFloat(0);
-      uploadFood(values, props.onFoodUpdated, props.username, {updating: true});
-    } else {
-      uploadFood(values, props.onFoodAdded, props.username, {updating: false});
-    }
+    values.id = props.profile.id;
+    values.image = props.profile.image;
+    uploadProfile(values, props.onProfileUpdated, props.user);
   },
-})(FoodForm);
+})(ProfileForm);

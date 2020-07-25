@@ -51,6 +51,18 @@ export function deleteFood(food, storename, deleteComplete) {
     .catch(error => console.log(error));
 }
 
+export async function getProfile(storename, profileRetreived) {
+  var snapshot = await firestore()
+    .collection('stores')
+    .doc(storename)
+    .get();
+  console.log('snapshot data: ', snapshot.data());
+
+  var profile = snapshot.data();
+
+  profileRetreived(profile);
+}
+
 export async function getFoods(storename, foodsRetreived) {
   var foodList = [];
 
@@ -72,7 +84,7 @@ export async function getFoods(storename, foodsRetreived) {
 
 export async function getOrders(storename, ordersRetreived) {
   var ordersList = [];
-
+  console.log(storename);
   var snapshot = await firestore()
     .collection('order')
     .doc(storename)
@@ -81,7 +93,7 @@ export async function getOrders(storename, ordersRetreived) {
     .where('seller_comp', '==', false)
     .orderBy('time')
     .get();
-
+  console.log('all orders for' + storename + '=' + snapshot);
   snapshot.forEach(doc => {
     const orderItem = doc.data();
     orderItem.id = doc.id;
@@ -233,6 +245,7 @@ export function addFood(food, storename, addComplete) {
     .add(food)
     .then(snapshot => {
       food.id = snapshot.id;
+      food.price = parseFloat(food.price);
       snapshot.set(food);
     })
     .then(() => addComplete(food))
@@ -242,6 +255,7 @@ export function addFood(food, storename, addComplete) {
 export function updateFood(food, storename, updateComplete) {
   food.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
   console.log('Updating food in firebase');
+  console.log('food details: ', food);
 
   firestore()
     .collection('stores')
@@ -250,5 +264,70 @@ export function updateFood(food, storename, updateComplete) {
     .doc(food.id)
     .set(food)
     .then(() => updateComplete(food))
+    .catch(error => console.log(error));
+  console.log('food successfully updated');
+}
+
+export function uploadProfile(profile, onProfileUploaded, storename) {
+  if (profile.imageUri) {
+    const fileExtension = profile.imageUri.split('.').pop();
+    console.log('EXT: ' + fileExtension);
+
+    var uuid = uuidv4();
+
+    const fileName = `${uuid}.${fileExtension}`;
+    console.log(fileName);
+
+    var storageRef = firebase.storage().ref(`profile/images/${fileName}`);
+
+    storageRef.putFile(profile.imageUri).on(
+      firebase.storage.TaskEvent.STATE_CHANGED,
+      snapshot => {
+        console.log('snapshot: ' + snapshot.state);
+        console.log(
+          'progress: ' +
+            (snapshot.bytesTransferred / snapshot.totalBytes) * 100,
+        );
+
+        if (snapshot.state === firebase.storage.TaskState.SUCCESS) {
+          console.log('Success');
+        }
+      },
+      error => {
+        unsubscribe();
+        console.log('image upload error: ' + error.toString());
+      },
+      () => {
+        storageRef.getDownloadURL().then(downloadUrl => {
+          console.log('File available at: ' + downloadUrl);
+
+          profile.image = downloadUrl;
+
+          delete profile.imageUri;
+
+          console.log('Updating....');
+          updateFood(profile, storename, onProfileUploaded);
+        });
+      },
+    );
+  } else {
+    console.log('Skipping image upload');
+
+    delete profile.imageUri;
+
+    console.log('Updating....');
+    updateProfile(profile, storename, onProfileUploaded);
+  }
+}
+
+export function updateProfile(profile, storename, updateComplete) {
+  profile.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+  console.log('Updating profile in firebase');
+
+  firestore()
+    .collection('stores')
+    .doc(storename)
+    .set(profile)
+    .then(() => updateComplete(profile))
     .catch(error => console.log(error));
 }
