@@ -11,20 +11,18 @@ import {
 import {Divider, Icon} from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
 import {getProfile} from '../comp/foodbackend';
-import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
-import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default class sellerProfilePage extends Component {
   state = {
-    currentEmail: '',
+    user: '',
     profile: [],
   };
 
   update() {
     firestore()
-      .collection('users')
-      .doc(currentEmail)
+      .collection('stores')
+      .doc(user)
       .onSnapshot(function(doc) {
         console.log('current data: ', doc.data());
       });
@@ -38,18 +36,19 @@ export default class sellerProfilePage extends Component {
   };
 
   componentDidMount() {
-    var userEmail = auth().currentUser.email;
-    console.log(userEmail);
-    getProfile(userEmail, this.onProfileReceived);
+    var user = auth().currentUser.displayName;
+    console.log(user);
+    getProfile(user, this.onProfileReceived);
     this.setState({
-      currentEmail: userEmail,
+      user: user,
     });
-    console.log(this.state.currentEmail);
+    console.log(this.state.user);
 
     this.props.navigation.addListener('focus', payload => {
-      getProfile(auth().currentUser.email, this.onProfileReceived);
+      var newUser = auth().currentUser.displayName;
+      getProfile(newUser, this.onProfileReceived);
       this.setState({
-        currentEmail: auth().currentUser.email,
+        user: newUser,
       });
     });
   }
@@ -65,7 +64,7 @@ export default class sellerProfilePage extends Component {
             onPress={() =>
               this.props.navigation.navigate('Edit Profile', {
                 profile: this.state.profile,
-                email: this.state.currentEmail,
+                user: this.state.user,
               })
             }
           />
@@ -108,6 +107,7 @@ const styles = StyleSheet.create({
     width: '80%',
     aspectRatio: 2,
     marginBottom: 16,
+    borderRadius: 15,
   },
   row: {
     flexDirection: 'row',

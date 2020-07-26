@@ -1,5 +1,12 @@
 import React, {Component} from 'react';
-import {View, Text, StyleSheet, FlatList, SafeAreaView} from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  FlatList,
+  SafeAreaView,
+  DatePickerAndroid,
+} from 'react-native';
 import {ListItem, Divider} from 'react-native-elements';
 import {getOrders, toggleSellerComp} from '../comp/foodbackend';
 import auth from '@react-native-firebase/auth';
@@ -20,6 +27,14 @@ export default class sOrders extends Component {
 
   componentDidMount() {
     var newUser = auth().currentUser.displayName;
+    this.timer = setInterval(() => {
+      console.log('fetching orders');
+      getOrders(newUser, this.onOrdersReceived);
+      this.setState({
+        user: newUser,
+      });
+    }, 10000);
+
     getOrders(newUser, this.onOrdersReceived);
     this.setState({
       user: newUser,
@@ -28,7 +43,7 @@ export default class sOrders extends Component {
 
   render() {
     return this.state.orderItems.length > 0 ? (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={{flex: 1}}>
         <FlatList
           data={this.state.orderItems}
           ItemSeparatorComponent={() => (
@@ -37,10 +52,13 @@ export default class sOrders extends Component {
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item, index}) => {
             console.log(item.order);
+            var date = item.time
+              .toDate()
+              .toLocaleString('en-SG', {timeZone: 'UTC'});
             return (
-              <View>
+              <View elevation={5} style={styles.container}>
                 <TouchableOpacity
-                  style={{backgroundColor: 'grey'}}
+                  style={{backgroundColor: 'white'}}
                   onPress={() => {
                     toggleSellerComp(this.state.user, item.id);
                     this.setState(prevState => ({
@@ -50,18 +68,13 @@ export default class sOrders extends Component {
                   }}>
                   <FlatList
                     data={item.order}
-                    renderItem={({item}) => <ListItem title={item} />}
+                    renderItem={({item}) => (
+                      <Text style={styles.order}>{item}</Text>
+                    )}
                     keyExtractor={item => item}
                   />
-                  <ListItem
-                    containerStyle={styles.listItem}
-                    titleStyle={styles.titleStyle}
-                    title={item.order}
-                    subtitleStyle={styles.subtitleStyle}
-                    subtitle={'Order Time: ' + item.time}
-                    subtitleStyle={styles.subtitleStyle}
-                    subtitle={'Customer: ' + item.userEmail}
-                  />
+                  <Text> Order Time: {date}</Text>
+                  <Text> Customer: {item.userEmail}</Text>
                 </TouchableOpacity>
               </View>
             );
@@ -77,8 +90,9 @@ export default class sOrders extends Component {
 }
 
 const styles = StyleSheet.create({
+  order: {fontSize: 20, padding: 5},
   container: {
-    flex: 1,
+    margin: 10,
   },
   listItem: {
     marginTop: 8,

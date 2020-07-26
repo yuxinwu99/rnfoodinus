@@ -8,6 +8,7 @@ import {
   TextInput,
   Button,
   Linking,
+  Image,
 } from 'react-native';
 import firestore from '@react-native-firebase/firestore';
 
@@ -77,6 +78,7 @@ export default class Order extends React.Component {
                 results.push(documentSnapshot.data()),
               );
               this.setState({menu: results.filter(item => item.id != 0)});
+              console.log('results: ', results);
             });
         });
       })
@@ -159,6 +161,7 @@ export default class Order extends React.Component {
     const {key} = this.props.route.params;
     return (
       <View style={styles.container}>
+        {console.log('location: ', this.props.route.params.location)}
         {console.log('key=' + key)}
         {console.log('')}
         {
@@ -183,27 +186,32 @@ export default class Order extends React.Component {
           // />
         }
         <TouchableOpacity
+          style={styles.bigButton}
           onPress={() =>
-            Linking.openURL('http://plus.codes/7QXC+MG,Singapore')
+            Linking.openURL(
+              'http://plus.codes/' + this.props.route.params.location,
+            )
           }>
-          <Text>open map</Text>
+          <Text style={{textAlign: 'center'}}>
+            Click here to find the store!
+          </Text>
         </TouchableOpacity>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           onPress={() =>
             Linking.openURL(
               'https://support.google.com/maps/answer/7047426?co=GENIE.Platform%3DAndroid&hl=en',
             )
           }>
           <Text>how to get plus code</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <FlatList
           data={this.state.menu}
           renderItem={({item}) => (
             <View style={styles.itemContainer} elevation={5}>
-              <Text style={styles.name}>
-                {item.name + '                $' + item.price}
-              </Text>
-
+              <Image style={styles.photo} source={{uri: item.image}} />
+              <Text style={styles.name}>{'Name: ' + item.name}</Text>
+              <Text style={styles.name}>{'Price: $' + item.price}</Text>
+              <Text style={styles.text}>{'no. ordered: ' + item.count}</Text>
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => {
@@ -218,9 +226,6 @@ export default class Order extends React.Component {
                   +
                 </Text>
               </TouchableOpacity>
-              <Text style={styles.text}>
-                {'no. of items ordered=' + item.count}
-              </Text>
               <TouchableOpacity
                 style={styles.button}
                 onPress={() => {
@@ -259,42 +264,62 @@ const styles = StyleSheet.create({
   button: {
     height: 30,
     width: '10%',
-    alignSelf: 'flex-end',
-    marginLeft: 100,
+    //alignSelf: 'flex-end',
+    //marginLeft: 100,
     margin: 10,
+    flexDirection: 'column',
     // borderColor: '#aaaaaa',
     // borderWidth: 0.9,
-    // borderRadius: 5,
-    //backgroundColor: 'blue',
+    borderRadius: 5,
+    backgroundColor: 'skyblue',
     alignItems: 'center',
   },
   bigButton: {
+    borderRadius: 15,
     backgroundColor: 'deepskyblue',
   },
   name: {
     width: '50%',
     height: 30,
-    margin: 10,
+    margin: 0,
     fontSize: 20,
     fontWeight: 'bold',
-    //backgroundColor: 'red',
+    justifyContent: 'center',
+    textAlign: 'center',
+    backgroundColor: 'azure',
+    borderRadius: 5,
   },
   text: {
     width: '50%',
     height: 30,
-    margin: 10,
+    margin: 5,
     fontSize: 20,
-    //backgroundColor: 'red',
+    //backgroundColor: 'purple',
+    borderRadius: 5,
   },
   itemContainer: {
     flex: 1,
     marginBottom: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: 'white',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    alignContent: 'space-around',
+    alignContent: 'center',
+    marginLeft: 20,
+    marginRight: 20,
+    borderRadius: 15,
   },
   container: {
     flex: 1,
+  },
+  photo: {
+    width: '90%',
+    aspectRatio: 2,
+    height: 200,
+    alignContent: 'center',
+    borderRadius: 15,
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0,
   },
 });
