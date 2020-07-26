@@ -1,12 +1,5 @@
 import React, {Component} from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  FlatList,
-  SafeAreaView,
-  DatePickerAndroid,
-} from 'react-native';
+import {View, Text, StyleSheet, FlatList, SafeAreaView} from 'react-native';
 import {ListItem, Divider} from 'react-native-elements';
 import {getOrders, toggleSellerComp} from '../comp/foodbackend';
 import auth from '@react-native-firebase/auth';
@@ -60,7 +53,7 @@ export default class sOrders extends Component {
                 <TouchableOpacity
                   style={{backgroundColor: 'white'}}
                   onPress={() => {
-                    toggleSellerComp(this.state.user, item.id);
+                    toggleSellerComp(this.state.user, item.id, item.userEmail);
                     this.setState(prevState => ({
                       indexer: (prevState.indexer = index),
                     }));

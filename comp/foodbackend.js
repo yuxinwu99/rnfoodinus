@@ -143,7 +143,7 @@ export async function getCOrders(storename, ordersRetreived) {
   ordersRetreived(ordersList);
 }
 
-export async function toggleSellerComp(storename, orderID) {
+export async function toggleSellerComp(storename, orderID, email) {
   await firestore()
     .collection('order')
     .doc(storename)
@@ -155,9 +155,17 @@ export async function toggleSellerComp(storename, orderID) {
     .then(() => {
       console.log('Seller_Comp Updated!');
     });
+  await firestore()
+    .collection('users')
+    .doc(email)
+    .collection('Orders')
+    .doc(orderID)
+    .update({
+      seller_comp: true,
+    });
 }
 
-export async function toggleCustomerComp(storename, orderID) {
+export async function toggleCustomerComp(storename, orderID, email) {
   await firestore()
     .collection('order')
     .doc(storename)
@@ -168,6 +176,14 @@ export async function toggleCustomerComp(storename, orderID) {
     })
     .then(() => {
       console.log('Customer_comp Updated!');
+    });
+  await firestore()
+    .collection('users')
+    .doc(email)
+    .collection('Orders')
+    .doc(orderID)
+    .update({
+      customer_comp: true,
     });
 }
 
@@ -252,8 +268,10 @@ export function addFood(food, storename, addComplete) {
 
 export function updateFood(food, storename, updateComplete) {
   food.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
+  food.price = parseFloat(food.price);
   console.log('Updating food in firebase');
   console.log('food details: ', food);
+  console.log('storename: ', storename);
 
   firestore()
     .collection('stores')

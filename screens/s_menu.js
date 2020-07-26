@@ -50,6 +50,12 @@ export default class sMenu extends Component {
       user: newUser,
     });
     console.log(this.state.user);
+    this.props.navigation.addListener('focus', payload => {
+      getFoods(newUser, this.onFoodsReceived);
+      this.setState({
+        user: newUser,
+      });
+    });
   }
 
   showActionButton = () => (

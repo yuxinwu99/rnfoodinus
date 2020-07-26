@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import FoodForm from '../comp/FoodForm';
+import auth from '@react-native-firebase/auth';
 
 export default class addFoodScreen extends Component {
   state = {
@@ -28,7 +29,7 @@ export default class addFoodScreen extends Component {
     const currentUser = this.props.route.params.user;
     return (
       <FoodForm
-        username={this.props.route.params.username}
+        username={auth().currentUser.displayName}
         food={this.state.food}
         onFoodAdded={this.props.route.params.foodAddedCallback}
         onFoodUpdated={this.onFoodUpdated}

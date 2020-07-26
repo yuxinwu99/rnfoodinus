@@ -11,6 +11,8 @@ import StoresStack from './storestack';
 import ProfilePage from '../screens/profile';
 import LoginStack from './loginstack';
 import Notif from '../screens/notification';
+import notifStack from './notifstack';
+import profStack from './profstack';
 
 const Drawer = createDrawerNavigator();
 export default function ConsumerDrawerNavigator() {
@@ -18,12 +20,12 @@ export default function ConsumerDrawerNavigator() {
 
   return (
     <Drawer.Navigator
-      initialRouteName="User"
+      initialRouteName="Stores"
       drawerType={dimensions.width >= 768 ? 'permanent' : 'front'}>
-      <Drawer.Screen name="User" component={ProfilePage} />
+      <Drawer.Screen name="User" component={profStack} />
       <Drawer.Screen name="Purchase History" component={histStack} />
       <Drawer.Screen name="Stores" component={StoresStack} />
-      <Drawer.Screen name="Notif" component={Notif} />
+      <Drawer.Screen name="Order status" component={notifStack} />
     </Drawer.Navigator>
   );
 }

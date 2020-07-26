@@ -19,21 +19,6 @@ export default class Payment extends React.Component {
     var currentTime = firebase.firestore.Timestamp.now();
     if (user != null) {
       firestore()
-        .collection('users')
-        .doc(user.email)
-        .collection('Orders')
-        .add({
-          time: currentTime,
-          order: order,
-          customer_comp: false,
-          seller_comp: false,
-        })
-        .then(snapshot => {
-          id = snapshot.id;
-          snapshot.update({id: id});
-        });
-
-      firestore()
         .collection('order')
         .doc(this.props.route.params.name)
         .collection('comorder')
@@ -47,7 +32,21 @@ export default class Payment extends React.Component {
         .then(snapshot => {
           id = snapshot.id;
           snapshot.update({id: id});
-        });
+          firestore()
+            .collection('users')
+            .doc(user.email)
+            .collection('Orders')
+            .doc(id)
+            .set({
+              time: currentTime,
+              order: order,
+              customer_comp: false,
+              seller_comp: false,
+              id: id,
+              store: this.props.route.params.name,
+            });
+        })
+        .catch(err => console.error(err));
 
       // firestore()
       //   .collection('users')

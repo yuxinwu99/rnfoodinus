@@ -4,7 +4,7 @@ import {ListItem, Divider} from 'react-native-elements';
 import {getSOrders, toggleCustomerComp} from '../comp/foodbackend';
 import auth from '@react-native-firebase/auth';
 
-export default class sOrders extends Component {
+export default class sCompleted extends Component {
   state = {
     orderItems: [],
     indexer: 0,
@@ -19,6 +19,14 @@ export default class sOrders extends Component {
 
   componentDidMount() {
     var newUser = auth().currentUser.displayName;
+    this.timer = setInterval(() => {
+      console.log('fetching orders');
+      getSOrders(newUser, this.onOrdersReceived);
+      this.setState({
+        user: newUser,
+      });
+    }, 10000);
+
     getSOrders(newUser, this.onOrdersReceived);
     this.setState({
       user: newUser,
@@ -27,7 +35,7 @@ export default class sOrders extends Component {
 
   render() {
     return this.state.orderItems.length > 0 ? (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={{flex: 1}}>
         <FlatList
           data={this.state.orderItems}
           ItemSeparatorComponent={() => (
@@ -35,22 +43,22 @@ export default class sOrders extends Component {
           )}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({item, index}) => {
+            console.log(item.order);
+            var date = item.time
+              .toDate()
+              .toLocaleString('en-SG', {timeZone: 'UTC'});
             return (
-              <ListItem
-                containerStyle={styles.listItem}
-                titleStyle={styles.titleStyle}
-                title={item.order}
-                subtitleStyle={styles.subtitleStyle}
-                subtitle={'Order Time: ' + item.time}
-                subtitleStyle={styles.subtitleStyle}
-                subtitle={'Customer: ' + item.useremail}
-                onPress={() => {
-                  toggleCustomerComp(this.state.user, item.id);
-                  this.setState(prevState => ({
-                    indexer: (prevState.indexer = index),
-                  }));
-                }}
-              />
+              <View elevation={5} style={styles.container}>
+                <FlatList
+                  data={item.order}
+                  renderItem={({item}) => (
+                    <Text style={styles.order}>{item}</Text>
+                  )}
+                  keyExtractor={item => item}
+                />
+                <Text> Order Time: {date}</Text>
+                <Text> Customer: {item.userEmail}</Text>
+              </View>
             );
           }}
         />
@@ -64,8 +72,9 @@ export default class sOrders extends Component {
 }
 
 const styles = StyleSheet.create({
+  order: {fontSize: 20, padding: 5},
   container: {
-    flex: 1,
+    margin: 10,
   },
   listItem: {
     marginTop: 8,

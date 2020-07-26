@@ -12,17 +12,44 @@ import {
 } from 'react-native';
 import {Divider, Icon} from 'react-native-elements';
 import auth from '@react-native-firebase/auth';
-import {getProfile} from '../comp/foodbackend';
 import firebase from '@react-native-firebase/app';
 import firestore from '@react-native-firebase/firestore';
+import {TouchableOpacity} from 'react-native-gesture-handler';
 
 export default class Notif extends React.Component {
   state = {orderItems: []};
+  toggleCustomerComp = item => {
+    if (item.seller_comp == true) {
+      firestore()
+        .collection('order')
+        .doc(item.store)
+        .collection('comorder')
+        .doc(item.id)
+        .update({
+          customer_comp: true,
+        })
+        .then(() => {
+          console.log('Customer_comp Updated!');
+        });
+      firestore()
+        .collection('users')
+        .doc(auth().currentUser.email)
+        .collection('Orders')
+        .doc(item.id)
+        .update({
+          customer_comp: true,
+        });
+      this.fetchdata();
+    } else {
+      Alert.alert('The Order is not done yet, please wait.');
+    }
+  };
   fetchdata = () => {
     firestore()
       .collection('users')
       .doc(auth().currentUser.email)
       .collection('Orders')
+      .where('customer_comp', '==', false)
       .get()
       .then(querySnapshot => {
         const results = [];
@@ -57,17 +84,26 @@ export default class Notif extends React.Component {
               .toLocaleString('en-SG', {timeZone: 'UTC'});
             return (
               <View elevation={5} style={styles.container}>
-                {item.seller_comp == false ? (
-                  <Text style={styles.ready}> YOUR ORDER IS READY!!!!!</Text>
-                ) : null}
-                <FlatList
-                  data={item.order}
-                  renderItem={({item}) => (
-                    <Text style={styles.order}>{item}</Text>
-                  )}
-                  keyExtractor={item => item}
-                />
-                <Text> Order Time: {date}</Text>
+                <TouchableOpacity
+                  style={{backgroundColor: 'white'}}
+                  onPress={() => {
+                    this.toggleCustomerComp(item);
+                  }}>
+                  {item.seller_comp == true ? (
+                    <Text style={styles.ready}> YOUR ORDER IS READY!!!!!</Text>
+                  ) : null}
+                  {item.customer_comp == true ? (
+                    <Text style={styles.ready}> YOUR ORDER IS READY!!!!!</Text>
+                  ) : null}
+                  <FlatList
+                    data={item.order}
+                    renderItem={({item}) => (
+                      <Text style={styles.order}>{item}</Text>
+                    )}
+                    keyExtractor={item => item}
+                  />
+                  <Text> Order Time: {date}</Text>
+                </TouchableOpacity>
               </View>
             );
           }}
