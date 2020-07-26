@@ -147,7 +147,6 @@ export default class Stores extends React.Component {
           renderItem={({item}) => (
             //console.log('location: ', item.location)
             <TouchableOpacity
-              //style={styles.itemContainer}
               elevation={5}
               onPress={() => {
                 this.props.navigation.navigate('Order', {
@@ -210,8 +209,10 @@ const styles = StyleSheet.create({
     borderWidth: 0.5,
     borderRadius: 15,
     paddingBottom: 10,
+    backgroundColor: '#FAFAFA',
   },
   photo: {
+    marginTop: 10,
     width: '90%',
     height: 200,
     //aspectRatio: 2,

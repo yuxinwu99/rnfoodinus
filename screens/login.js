@@ -70,20 +70,22 @@ export default class Login extends Component {
     }
   };
   componentDidMount() {
-    if (auth().currentUser.email != null) {
-      firestore()
-        .collection('users')
-        .doc(auth().currentUser.email)
-        .get()
-        .then(doc => {
-          const result = doc.data().seller;
-          this.state.seller = result;
-          console.log('seller= ' + this.state.seller);
-          if (this.state.seller == true)
-            this.props.navigation.navigate('Seller');
-          else this.props.navigation.navigate('Consumer');
-        });
-    }
+    // if (auth().currentUser.email != null) {
+    //   firestore()
+    //     .collection('users')
+    //     .doc(auth().currentUser.email)
+    //     .get()
+    //     .then(doc => {
+    //       const result = doc.data().seller;
+    //       this.state.seller = result;
+    //       console.log('seller= ' + this.state.seller);
+    //       if (this.state.seller == true)
+    //         this.props.navigation.navigate('Seller');
+    //       else this.props.navigation.navigate('Consumer');
+    //     });
+    // } else {
+    //   null;
+    // }
   }
   render() {
     if (this.state.isLoading) {

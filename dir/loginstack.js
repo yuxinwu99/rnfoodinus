@@ -31,19 +31,7 @@ export default function LoginStack() {
     //   //headerTitleAlign: 'center',
     //}}
     >
-      <Stack.Screen
-        name="Login"
-        component={Login}
-        // options={{
-        //   headerLeft: () => (
-        //     <MenuImage
-        //       onPress={() => {
-        //         navigation.openDrawer();
-        //       }}
-        //     />
-        //   ),
-        // }}
-      />
+      <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Seller Signup" component={sSignup} />
       <Stack.Screen name="Customer Signup" component={Signup} />
       <Stack.Screen

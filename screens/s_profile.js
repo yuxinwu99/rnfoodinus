@@ -24,7 +24,7 @@ export default class sellerProfilePage extends Component {
       .collection('stores')
       .doc(user)
       .onSnapshot(function(doc) {
-        console.log('current data: ', doc.data());
+        //console.log('current data: ', doc.data());
       });
   }
 
@@ -32,7 +32,7 @@ export default class sellerProfilePage extends Component {
     this.setState(prevState => ({
       profile: (prevState.profile = profile),
     }));
-    console.log('profile: ', this.state.profile);
+    //console.log('profile: ', this.state.profile);
   };
 
   componentDidMount() {
@@ -61,12 +61,16 @@ export default class sellerProfilePage extends Component {
             reverse
             name="ios-create"
             type="ionicon"
-            onPress={() =>
+            onPress={() => {
               this.props.navigation.navigate('Edit Profile', {
                 profile: this.state.profile,
                 user: this.state.user,
-              })
-            }
+              });
+              console.log(
+                'CURRENT USER AHKSJDJHKVDSAHLBRHAUHEFUHBUECFQWBFWAUBIWUABIGcgdiuchn dgnaguo biwgf awbcfhEHFOCAIWHOE WHUNIO OG QIUWGBOQWIUCCQI TBEQWTY ' +
+                  this.state.user,
+              );
+            }}
           />
           <Icon
             reverse

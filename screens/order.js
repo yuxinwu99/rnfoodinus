@@ -189,7 +189,9 @@ export default class Order extends React.Component {
           style={styles.bigButton}
           onPress={() =>
             Linking.openURL(
-              'http://plus.codes/' + this.props.route.params.location,
+              'http://plus.codes/' +
+                this.props.route.params.location +
+                ',singapore',
             )
           }>
           <Text style={{textAlign: 'center'}}>
@@ -209,8 +211,8 @@ export default class Order extends React.Component {
           renderItem={({item}) => (
             <View style={styles.itemContainer} elevation={5}>
               <Image style={styles.photo} source={{uri: item.image}} />
-              <Text style={styles.name}>{'Name: ' + item.name}</Text>
-              <Text style={styles.name}>{'Price: $' + item.price}</Text>
+              <Text style={styles.name}>{item.name}</Text>
+              <Text style={styles.name}>${item.price}</Text>
               <Text style={styles.text}>{'no. ordered: ' + item.count}</Text>
               <TouchableOpacity
                 style={styles.button}
@@ -279,9 +281,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'deepskyblue',
   },
   name: {
-    width: '50%',
+    margin: 1,
+    width: '100%',
     height: 30,
-    margin: 0,
     fontSize: 20,
     fontWeight: 'bold',
     justifyContent: 'center',

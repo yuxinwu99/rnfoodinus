@@ -10,7 +10,6 @@ import sordersStack from './s_ordersstack';
 import ssignupStack from './s_signupstack';
 import StoresStack from '../dir/storestack';
 import {useWindowDimensions} from 'react-native';
-import Home from '../screens/home';
 import loginStack from '../dir/loginstack';
 import sprofileStack from '../directory/s_profilestack';
 const Drawer = createDrawerNavigator();

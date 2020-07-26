@@ -21,16 +21,13 @@ export default class editProfileScreen extends Component {
   }
 
   onProfileUpdated = profile => {
-    console.log(profile);
-    this.props.navigation.popToTop();
+    this.props.navigation.navigate('Profile');
   };
 
   render() {
-    console.log('email: ', this.props.route.params.email);
-    console.log('e profile: ', this.state.profile);
     return (
       <ProfileForm
-        email={this.props.route.params.email}
+        name={this.props.route.params.user}
         profile={this.state.profile}
         onProfileUpdated={this.onProfileUpdated}
       />

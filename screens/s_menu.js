@@ -32,8 +32,6 @@ export default class sMenu extends Component {
     this.setState(prevState => ({
       menuItems: (prevState.menuItems = newMenuItems),
     }));
-
-    this.props.navigation.popToTop();
   };
 
   onFoodsReceived = menuItems => {
@@ -89,7 +87,7 @@ export default class sMenu extends Component {
                 subtitleStyle={styles.subtitleStyle}
                 subtitle={'Price: $' + item.price}
                 leftAvatar={{
-                  size: 'Large',
+                  size: 'xlarge',
                   rounded: false,
                   source: item.image && {
                     uri: item.image,
@@ -103,7 +101,7 @@ export default class sMenu extends Component {
                   this.props.navigation.navigate('Item Details', {
                     food: item,
                     username: this.state.user,
-                    itemDeletedCallback: this.onItemDeleted,
+                    foodDeletedCallback: this.onFoodDeleted(),
                   });
                 }}
               />
@@ -138,10 +136,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   titleStyle: {
-    fontSize: 30,
+    fontSize: 40,
   },
   subtitleStyle: {
-    fontSize: 18,
+    fontSize: 28,
   },
   emptyTitle: {
     fontSize: 32,

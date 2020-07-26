@@ -19,30 +19,26 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 export default class Notif extends React.Component {
   state = {orderItems: []};
   toggleCustomerComp = item => {
-    if (item.seller_comp == true) {
-      firestore()
-        .collection('order')
-        .doc(item.store)
-        .collection('comorder')
-        .doc(item.id)
-        .update({
-          customer_comp: true,
-        })
-        .then(() => {
-          console.log('Customer_comp Updated!');
-        });
-      firestore()
-        .collection('users')
-        .doc(auth().currentUser.email)
-        .collection('Orders')
-        .doc(item.id)
-        .update({
-          customer_comp: true,
-        });
-      this.fetchdata();
-    } else {
-      Alert.alert('The Order is not done yet, please wait.');
-    }
+    firestore()
+      .collection('order')
+      .doc(item.store)
+      .collection('comorder')
+      .doc(item.id)
+      .update({
+        customer_comp: true,
+      })
+      .then(() => {
+        console.log('Customer_comp Updated!');
+      });
+    firestore()
+      .collection('users')
+      .doc(auth().currentUser.email)
+      .collection('Orders')
+      .doc(item.id)
+      .update({
+        customer_comp: true,
+      });
+    this.fetchdata();
   };
   fetchdata = () => {
     firestore()
@@ -87,12 +83,29 @@ export default class Notif extends React.Component {
                 <TouchableOpacity
                   style={{backgroundColor: 'white'}}
                   onPress={() => {
-                    this.toggleCustomerComp(item);
+                    if (item.seller_comp == true) {
+                      Alert.alert(
+                        'Have you collected your food?',
+                        'Cannot be undone',
+                        [
+                          {text: 'Cancel'},
+                          {
+                            text: 'OK',
+                            onPress: () => {
+                              this.toggleCustomerComp(item);
+                            },
+                          },
+                        ],
+                        {cancelable: false},
+                      );
+                    } else {
+                      Alert.alert(
+                        'Please wait',
+                        'The Order is not done yet :D',
+                      );
+                    }
                   }}>
                   {item.seller_comp == true ? (
-                    <Text style={styles.ready}> YOUR ORDER IS READY!!!!!</Text>
-                  ) : null}
-                  {item.customer_comp == true ? (
                     <Text style={styles.ready}> YOUR ORDER IS READY!!!!!</Text>
                   ) : null}
                   <FlatList

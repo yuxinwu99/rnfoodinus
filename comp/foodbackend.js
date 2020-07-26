@@ -39,7 +39,7 @@ import {v4 as uuidv4} from 'uuid';
 // }
 
 export function deleteFood(food, storename, deleteComplete) {
-  console.log(food);
+  console.log('deleting: ' + food + 'for ' + storename);
 
   firestore()
     .collection('stores')
@@ -285,6 +285,7 @@ export function updateFood(food, storename, updateComplete) {
 }
 
 export function uploadProfile(profile, onProfileUploaded, storename) {
+  console.log('uploading profile' + ' store= ' + storename);
   if (profile.imageUri) {
     const fileExtension = profile.imageUri.split('.').pop();
     console.log('EXT: ' + fileExtension);
@@ -322,7 +323,7 @@ export function uploadProfile(profile, onProfileUploaded, storename) {
           delete profile.imageUri;
 
           console.log('Updating....');
-          updateFood(profile, storename, onProfileUploaded);
+          updateProfile(profile, storename, onProfileUploaded);
         });
       },
     );
@@ -337,6 +338,7 @@ export function uploadProfile(profile, onProfileUploaded, storename) {
 }
 
 export function updateProfile(profile, storename, updateComplete) {
+  console.log('updating profile' + ' store= ' + storename);
   profile.updatedAt = firebase.firestore.FieldValue.serverTimestamp();
   console.log('Updating profile in firebase');
 

@@ -16,15 +16,7 @@ const ProfileForm = props => {
         image={props.profile.image}
         onImagePicked={setProfileImage}
       />
-      <TextInput
-        value={props.values.name}
-        style={styles.longFormInput}
-        placeholder="Name"
-        onChangeText={text => {
-          props.setFieldValue('name', text);
-        }}
-      />
-      <Text style={styles.validationText}> {props.errors.name}</Text>
+      <Text style={styles.titletext}> {props.values.name} </Text>
       <TextInput
         value={props.values.description}
         style={styles.longFormInput}
@@ -56,6 +48,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 32,
+  },
+  titletext: {
+    textAlign: 'center',
+    fontSize: 20,
+    marginTop: 10,
+    marginBottom: 10,
   },
   container: {
     width: 300,
@@ -97,10 +95,6 @@ export default withFormik({
   enableReinitialize: true,
   validationSchema: props =>
     yup.object().shape({
-      name: yup
-        .string()
-        .max(30)
-        .required(),
       description: yup
         .string()
         .max(100)
@@ -112,11 +106,10 @@ export default withFormik({
     }),
   handleSubmit: (values, {props}) => {
     console.log(props);
-
     console.log(values);
 
-    //values.createdAt = props.profile.createdAt;
+    values.id = props.profile.id;
     values.image = props.profile.image;
-    uploadProfile(values, props.onProfileUpdated, props.email);
+    uploadProfile(values, props.onProfileUpdated, values.name);
   },
 })(ProfileForm);

@@ -2,7 +2,6 @@ import React from 'react';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import {NavigationContainer} from '@react-navigation/native';
 import histStack from './histstack';
-import homeStack from './homestack';
 import loginStack from './loginstack';
 import signupStack from './signupstack';
 import {useWindowDimensions} from 'react-native';

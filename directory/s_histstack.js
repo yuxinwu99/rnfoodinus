@@ -20,7 +20,7 @@ const shistStack = ({navigation}) => {
     // }}
     >
       <Stack.Screen
-        name="Hist"
+        name="History"
         component={sHistory}
         options={{
           headerLeft: () => (

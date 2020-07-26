@@ -45,6 +45,8 @@ export default class Payment extends React.Component {
               id: id,
               store: this.props.route.params.name,
             });
+          this.props.navigation.popToTop();
+          this.props.navigation.navigate('Order status');
         })
         .catch(err => console.error(err));
 

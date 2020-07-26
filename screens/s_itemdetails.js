@@ -6,7 +6,7 @@ import {deleteFood} from '../comp/foodbackend';
 export default class itemDetailScreen extends Component {
   render() {
     const food = this.props.route.params.food;
-    const user = this.props.route.params.user;
+    const user = this.props.route.params.username;
     const onFoodDeleted = this.props.route.params.foodDeletedCallback;
 
     console.log(food);
@@ -39,6 +39,7 @@ export default class itemDetailScreen extends Component {
                     text: 'OK',
                     onPress: () => {
                       deleteFood(food, user, onFoodDeleted);
+                      this.props.navigation.popToTop();
                     },
                   },
                 ],
