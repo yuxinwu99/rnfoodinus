@@ -70,11 +70,10 @@ export default class Login extends Component {
     }
   };
   componentDidMount() {
-    var user = auth().currentUser.email;
-    if (user != null) {
+    if (auth().currentUser.email != null) {
       firestore()
         .collection('users')
-        .doc(user)
+        .doc(auth().currentUser.email)
         .get()
         .then(doc => {
           const result = doc.data().seller;

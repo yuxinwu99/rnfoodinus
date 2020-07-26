@@ -10,6 +10,7 @@ import MenuImage from '../comp/MenuImage';
 import StoresStack from './storestack';
 import ProfilePage from '../screens/profile';
 import LoginStack from './loginstack';
+import Notif from '../screens/notification';
 
 const Drawer = createDrawerNavigator();
 export default function ConsumerDrawerNavigator() {
@@ -22,6 +23,7 @@ export default function ConsumerDrawerNavigator() {
       <Drawer.Screen name="User" component={ProfilePage} />
       <Drawer.Screen name="Purchase History" component={histStack} />
       <Drawer.Screen name="Stores" component={StoresStack} />
+      <Drawer.Screen name="Notif" component={Notif} />
     </Drawer.Navigator>
   );
 }

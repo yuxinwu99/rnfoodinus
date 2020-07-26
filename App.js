@@ -8,7 +8,7 @@ import SellerDrawerNavigator from './directory/s_drawer';
 import auth from '@react-native-firebase/auth';
 import LoginStack from './dir/loginstack';
 import {createStackNavigator} from '@react-navigation/stack';
-import firebase from '@react-native-firebase/app';
+//import firebase from 'react-native-firebase';
 export default function App() {
   // useEffect(() => {
   //   creatChannel();
@@ -44,6 +44,7 @@ export default function App() {
   //       .catch(err => console.log(err));
   //   });
   // };
+
   return (
     <NavigationContainer>
       <LoginStack />
