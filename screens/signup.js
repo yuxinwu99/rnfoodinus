@@ -1,5 +1,4 @@
 import React from 'react';
-import firebaseDb from '../firebaseDb';
 import {
   StyleSheet,
   Text,
